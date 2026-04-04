@@ -9,5 +9,5 @@ package Pokemones;
  * @author admin
  */
 public class Abra {
-    
+    /* ESTAS CLASES IMPLEMENTARAN Y EXTENDERAS UNA INTERFAZ Y CLASE ABSTRACTA SEGUN EL PERSONAJE*/
 }
