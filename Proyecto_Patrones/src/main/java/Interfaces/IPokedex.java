@@ -9,6 +9,5 @@ package Interfaces;
  * @author admin
  */
 public interface IPokedex {
-    /* informacion descriptiva de cada pokemon*/
-    
+        
 }
