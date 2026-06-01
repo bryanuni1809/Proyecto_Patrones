@@ -1,21 +1,28 @@
-package Abstractas;
+package com.mycompany.Abstractas;
 
 public abstract class Pokemon {
+    protected int id;
     protected String nombre;
-    protected String tipo;
-    protected int defensa;
-    protected int ataque;
     protected int vida;
+    protected String tipo;
+    protected int vidaMax;
+    protected int ataque;
+    protected int defensa;
 
-    public Pokemon(String nombre, String tipo, int defensa, int ataque, int vida) {
-        this.nombre = nombre;
-        this.tipo = tipo;
-        this.defensa = defensa;
-        this.ataque = ataque;
-        this.vida = vida;
-    }
     
-    public abstract void ataqueComun();
+    
+    public Pokemon(int id, String nombre, int vida, String tipo, int vidaMax, int ataque, int defensa) {
+        this.id = id;
+        this.nombre = nombre;
+        this.vida = vida;
+        this.tipo = tipo;
+        this.vidaMax = vidaMax;
+        this.ataque = ataque;
+        this.defensa = defensa;
+    }
 
+
+
+    public abstract void ataqueComun();
 
 }
