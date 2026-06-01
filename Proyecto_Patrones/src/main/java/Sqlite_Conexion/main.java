@@ -24,11 +24,7 @@ public class main {
             );
 
             while(rs.next()) {
-                System.out.println(
-                    rs.getInt("numero") +
-                    " - " +
-                    rs.getString("nombre")
-                );
+                System.out.println(rs.getInt("numero") +" - " +rs.getString("nombre"));
             }
 
             conn.close();
