@@ -8,6 +8,6 @@ package Tipos;
  *
  * @author admin
  */
-public abstract class PokemonAgua {
+public abstract class ATespecial_Agua {
     
 }
