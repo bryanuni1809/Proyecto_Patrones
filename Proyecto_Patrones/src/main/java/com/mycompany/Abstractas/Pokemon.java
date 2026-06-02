@@ -1,6 +1,6 @@
 package com.mycompany.Abstractas;
 
-public abstract class Pokemon {
+public abstract class Pokemon implements Prototype<Pokemon> {
     protected String nombre;
     protected String tipo;
     protected int defensa;
@@ -15,6 +15,15 @@ public abstract class Pokemon {
         this.vida = vida;
     }
     
-    public abstract void ataqueComun();
+    //constructor de copia para prototype
+    public Pokemon(Pokemon pokemon) {
+        this.nombre = pokemon.nombre;
+        this.tipo = pokemon.tipo;
+        this.defensa = pokemon.defensa;
+        this.ataque = pokemon.ataque;
+        this.vida = pokemon.vida;
+    }
 
+    @Override
+    public abstract Pokemon clonar();
 }
