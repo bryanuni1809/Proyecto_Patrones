@@ -1,6 +1,6 @@
 package com.mycompany.Abstractas;
 
-public class Entrenador {
+public abstract class Entrenador {
 
     
 }
