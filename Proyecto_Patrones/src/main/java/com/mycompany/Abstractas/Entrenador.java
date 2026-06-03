@@ -1,4 +1,5 @@
 package com.mycompany.Abstractas;
+import com.mycompany.PatronesGOF.Prototype;
 
 public abstract class Entrenador implements Prototype<Entrenador> {
     protected String nombre;

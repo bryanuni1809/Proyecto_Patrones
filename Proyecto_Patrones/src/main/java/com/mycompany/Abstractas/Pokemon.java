@@ -1,5 +1,7 @@
 package com.mycompany.Abstractas;
 
+import com.mycompany.PatronesGOF.Prototype;
+
 public abstract class Pokemon implements Prototype<Pokemon> {
     protected String nombre;
     protected String tipo;
