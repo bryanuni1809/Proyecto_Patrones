@@ -4,8 +4,8 @@ public abstract class Pokemon {
     protected String nombre;
     protected String tipo;
     protected int defensa;
-    protected int ataque;
-    protected int vida;
+    protected int ataque; //hola
+    protected int vida; 
 
     public Pokemon(String nombre, String tipo, int defensa, int ataque, int vida) {
         this.nombre = nombre;
