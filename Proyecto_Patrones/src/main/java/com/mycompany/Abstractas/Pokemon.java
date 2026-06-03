@@ -1,4 +1,4 @@
-package Abstractas;
+package com.mycompany.Abstractas;
 
 public abstract class Pokemon {
     protected String nombre;
