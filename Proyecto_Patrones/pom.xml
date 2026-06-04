@@ -10,11 +10,11 @@
         <maven.compiler.release>21</maven.compiler.release>
         <exec.mainClass>com.mycompany.proyecto_patrones.Proyecto_Patrones</exec.mainClass>
     </properties>
-    <dependencies>
-    <dependencies>
-    <groupId>com.oracle.database.jdbc</groupId>
-    <artifactId>ojdbc8</artifactId>
-    <version>19.23.0.0</version>
-    </dependencies>
-    </dependencies>
+        <dependencies>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>42.7.3</version> 
+            </dependency>
+        </dependencies>
 </project>
