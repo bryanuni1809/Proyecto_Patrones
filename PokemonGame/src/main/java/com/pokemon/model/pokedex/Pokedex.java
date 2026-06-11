@@ -5,6 +5,10 @@ import com.pokemon.model.pokemon.Pokemon;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Gestiona el registro global de Pokémon mediante el patrón Singleton.
+ */
+
 public class Pokedex {
     private static Pokedex instancia;
 

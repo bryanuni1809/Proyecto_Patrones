@@ -1,13 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.pokemon.singleton;
 
 /**
- *
- * @author USER
+ * Administra una única conexión a la base de datos usando Singleton.
  */
+
 public class ConexionBD {
+    private static ConexionBD instancia;
+    private Connection conexion;
+    
+    private final String URL ="";
     
 }

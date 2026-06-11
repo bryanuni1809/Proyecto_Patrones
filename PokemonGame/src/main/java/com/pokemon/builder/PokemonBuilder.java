@@ -4,6 +4,10 @@ package com.pokemon.builder;
 import com.pokemon.model.pokemon.Pokemon;
 import com.pokemon.model.pokemon.TipoPokemon;
 
+/**
+ * Construye objetos Pokemon utilizando el patrón Builder.
+ */
+
 public class PokemonBuilder {
     private int id;
     private int numeroPokedex;

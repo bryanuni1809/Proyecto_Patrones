@@ -5,6 +5,10 @@ import com.pokemon.builder.PokemonBuilder;
 import com.pokemon.model.pokemon.Pokemon;
 import com.pokemon.model.pokemon.TipoPokemon;
 
+/**
+ * Centraliza la creación de Pokémon mediante el patrón Factory Method.
+ */
+
 public class PokemonFactory {
     public static Pokemon crearPokemon(
             int id,

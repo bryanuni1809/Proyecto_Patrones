@@ -1,6 +1,10 @@
 
 package com.pokemon.model.pokemon;
 
+/**
+ * Enum que define los tipos de Pokémon disponibles en el juego.
+ */
+
 public enum TipoPokemon {
     NORMAL,
     FUEGO,

@@ -1,6 +1,10 @@
 
 package com.pokemon.model.pokemon;
 
+/**
+ * Representa un Pokémon con sus datos y estadísticas principales.
+ */
+
 public class Pokemon {
     private int id;
     private int numeroPokedex;
