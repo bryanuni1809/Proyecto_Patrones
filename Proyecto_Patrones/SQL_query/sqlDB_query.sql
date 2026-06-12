@@ -82,3 +82,28 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO user_pokemon;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO user_pokemon;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON PROCEDURES TO user_pokemon;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TRIGGER FUNCTIONS TO user_pokemon;
+
+-- Funcion para obtener un pokemon específico por su ID
+CREATE OR REPLACE FUNCTION obtener_pokemon_por_id(p_id_buscado INTEGER)
+RETURNS TABLE(
+    id INTEGER,
+    nombre VARCHAR,
+    tipo TEXT,
+    defensa INTEGER,
+    ataque INTEGER,
+    vida INTEGER
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        pk.id,
+        pk.nombre,
+        t.nombre AS tipo,
+        pk.defensa,
+        pk.ataque,
+        pk.vida
+    FROM pokemones pk
+    INNER JOIN tipos t ON pk.tipo_id = t.id
+    WHERE pk.id = p_id_buscado;
+END;
+$$ LANGUAGE plpgsql;

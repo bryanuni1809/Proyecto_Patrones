@@ -20,7 +20,6 @@ public class Proyecto_Patrones {
 
         // Siempre verificamos que no sea null (por si el ID no existe)
         if (pikachu != null) {
-            System.out.println("¡Conexión exitosa! Datos obtenidos:");
             System.out.println("ID: " + pikachu.getId());
             System.out.println("Nombre: " + pikachu.getNombre());
             System.out.println("Tipo: " + pikachu.getTipo());
