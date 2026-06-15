@@ -1,3 +1,5 @@
+create database Pokemon_db;
+use Pokemon_db;
 -- 1. Tabla de tipos (Tú eliges el ID manualmente)
 CREATE TABLE tipos (
     id INTEGER PRIMARY KEY,
