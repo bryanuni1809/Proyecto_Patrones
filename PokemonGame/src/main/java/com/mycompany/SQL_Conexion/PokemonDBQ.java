@@ -30,6 +30,7 @@ public class PokemonDBQ {
                     pokemon.setVida(rs.getInt("p_vida"));
                 }
             }
+            
 
         } catch (SQLException e) {
             System.err.println("Error al obtener el pokemon con ID " + id + ":");
