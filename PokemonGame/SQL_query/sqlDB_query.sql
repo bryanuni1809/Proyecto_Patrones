@@ -62,9 +62,9 @@ INSERT INTO pokemones (numero_pokedex, nombre, tipo_id, nivel, hp, ataque, defen
 
 
 --Usuario para la Base de Datos y permisos
-CREATE USER user_pokemon2 WITH PASSWORD 'T#9vQ!2mL@7xR$4kZ&8pN^5wC*1jY';
+CREATE USER user_pokemon WITH PASSWORD 'T#9vQ!2mL@7xR$4kZ&8pN^5wC*1jY';
 
-GRANT CONNECT ON DATABASE "Pokemon_db" TO user_pokemon2;
+GRANT CONNECT ON DATABASE "Pokemon_db" TO user_pokemon;
 
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO user_pokemon;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO user_pokemon;
