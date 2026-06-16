@@ -1,5 +1,4 @@
 create database Pokemon_db;
-use Pokemon_db;
 -- Tabla para los tipos de Pokémon (ej: Fuego, Agua, Planta)
 CREATE TABLE tipos (
     id SERIAL PRIMARY KEY,
@@ -74,8 +73,6 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO user_pokemon
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO user_pokemon;
 
 -- Funcion para obtener un pokemon específico por su ID
-DROP FUNCTION IF EXISTS obtener_pokemon_por_id(INTEGER);
-
 CREATE OR REPLACE FUNCTION obtener_pokemon_por_id(p_id_buscado INTEGER)
 RETURNS TABLE(
     p_id INTEGER,
