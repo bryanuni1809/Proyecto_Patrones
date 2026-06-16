@@ -1,43 +1,31 @@
 create database Pokemon_db;
 use Pokemon_db;
--- 1. Tabla de tipos (Tú eliges el ID manualmente)
+-- Tabla para los tipos de Pokémon (ej: Fuego, Agua, Planta)
 CREATE TABLE tipos (
-    id INTEGER PRIMARY KEY,
-    nombre TEXT NOT NULL UNIQUE
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL UNIQUE
 );
 
--- 2. Tabla de pokemones (Tú eliges el número manualmente)
+-- Tabla principal de Pokémon
 CREATE TABLE pokemones (
-    numero INTEGER PRIMARY KEY,
-    nombre TEXT NOT NULL UNIQUE
+    id SERIAL PRIMARY KEY,
+    numero_pokedex INT NOT NULL UNIQUE,
+    nombre VARCHAR(100) NOT NULL,
+    tipo_id INT NOT NULL,
+    nivel INT DEFAULT 1 CHECK (nivel > 0),
+    hp INT CHECK (hp >= 0),
+    ataque INT CHECK (ataque >= 0),
+    defensa INT CHECK (defensa >= 0),
+    velocidad INT CHECK (velocidad >= 0),
+    
+    -- Relación con la tabla tipo_pokemon
+    CONSTRAINT fk_tipo_pokemon 
+        FOREIGN KEY (tipo_id) 
+        REFERENCES tipos(id) 
+        ON DELETE RESTRICT
 );
 
--- 3. Tabla intermedia de relaciones
-CREATE TABLE pokemon_tipos (
-    pokemon_numero INTEGER,
-    tipo_id INTEGER,
-    PRIMARY KEY (pokemon_numero, tipo_id),
-    FOREIGN KEY (pokemon_numero) REFERENCES pokemones(numero) ON DELETE CASCADE,
-    FOREIGN KEY (tipo_id) REFERENCES tipos(id) ON DELETE CASCADE
-);
-
-INSERT INTO pokemones (numero, nombre) VALUES 
-(7, 'Squirtle'),
-(10, 'Caterpie'),
-(19, 'Rattata'),
-(25, 'Pikachu'),
-(43, 'Oddish'),
-(50, 'Diglett'),
-(58, 'Growlithe'),
-(63, 'Abra'),
-(66, 'Machop'),
-(88, 'Grimer'),
-(147, 'Dratini'),
-(152, 'Chikorita'),
-(200, 'Misdreavus'),
-(403, 'Shinx'),
-(524, 'Roggenrola');
-
+-- Tipos 
 INSERT INTO tipos (id, nombre) VALUES 
 (1, 'Normal'),
 (2, 'Fuego'),
@@ -55,24 +43,25 @@ INSERT INTO tipos (id, nombre) VALUES
 (14, 'Fantasma'),
 (15, 'Dragon');
 
-INSERT INTO pokemon_tipos (pokemon_numero, tipo_id) VALUES 
-(25, 5),   -- Pikachu (Eléctrico)
-(7, 3),    -- Squirtle (Agua)
-(43, 4),   -- Oddish (Planta)
-(58, 2),   -- Growlithe (Fuego)
-(19, 1),   -- Rattata (Normal)
-(66, 7),   -- Machop (Lucha)
-(88, 8),   -- Grimer (Veneno)
-(50, 9),   -- Diglett (Tierra)
-(63, 11),  -- Abra (Psíquico)
-(10, 12),  -- Caterpie (Bicho)
-(147, 15), -- Dratini (Dragón)
-(403, 5),  -- Shinx (Eléctrico)
-(152, 4),  -- Chikorita (Planta)
-(200, 14), -- Misdreavus (Fantasma)
-(524, 13); -- Roggenrola (Roca)
+INSERT INTO pokemones (numero_pokedex, nombre, tipo_id, nivel, hp, ataque, defensa, velocidad) VALUES 
+(7,   'Squirtle',   3,  5, 44, 48, 65, 43),  -- Agua
+(10,  'Caterpie',   12, 5, 45, 30, 35, 45),  -- Bicho
+(19,  'Rattata',    1,  5, 30, 56, 35, 72),  -- Normal
+(25,  'Pikachu',    5,  5, 35, 55, 40, 90),  -- Eléctrico
+(43,  'Oddish',     4,  5, 45, 50, 55, 30),  -- Planta
+(50,  'Diglett',    9,  5, 10, 55, 25, 95),  -- Tierra
+(58,  'Growlithe',  2,  5, 55, 70, 45, 60),  -- Fuego
+(63,  'Abra',       11, 5, 25, 20, 15, 90),  -- Psíquico
+(66,  'Machop',     7,  5, 70, 80, 50, 35),  -- Lucha
+(88,  'Grimer',     8,  5, 80, 80, 50, 25),  -- Veneno
+(147, 'Dratini',    15, 5, 41, 64, 45, 50),  -- Dragón
+(152, 'Chikorita',  4,  5, 45, 49, 65, 45),  -- Planta
+(200, 'Misdreavus', 14, 5, 60, 60, 60, 85),  -- Fantasma
+(403, 'Shinx',      5,  5, 45, 65, 34, 45),  -- Eléctrico
+(524, 'Roggenrola', 13, 5, 55, 75, 85, 15);   -- Roca
 
 
+--Usuario para la Base de Datos y permisos
 CREATE USER user_pokemon WITH PASSWORD 'T#9vQ!2mL@7xR$4kZ&8pN^5wC*1jY';
 
 GRANT CONNECT ON DATABASE Pokemon_db TO user_pokemon;
@@ -88,22 +77,28 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TRIGGER FUNCTIONS TO user
 -- Funcion para obtener un pokemon específico por su ID
 CREATE OR REPLACE FUNCTION obtener_pokemon_por_id(p_id_buscado INTEGER)
 RETURNS TABLE(
-    id INTEGER,
-    nombre VARCHAR,
-    tipo TEXT,
-    defensa INTEGER,
-    ataque INTEGER,
-    vida INTEGER
+    p_id INTEGER,
+    p_numero_pokedex INTEGER,
+    p_nombre VARCHAR,
+    p_tipo VARCHAR,  
+    p_nivel INTEGER,
+    p_hp INTEGER,
+    p_ataque INTEGER,
+    p_defensa INTEGER,
+    p_velocidad INTEGER
 ) AS $$
 BEGIN
     RETURN QUERY
     SELECT 
         pk.id,
+        pk.numero_pokedex,
         pk.nombre,
         t.nombre AS tipo,
-        pk.defensa,
+        pk.nivel,
+        pk.hp,
         pk.ataque,
-        pk.vida
+        pk.defensa,
+        pk.velocidad
     FROM pokemones pk
     INNER JOIN tipos t ON pk.tipo_id = t.id
     WHERE pk.id = p_id_buscado;
