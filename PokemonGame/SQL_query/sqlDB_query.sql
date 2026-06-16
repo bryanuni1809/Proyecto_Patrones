@@ -62,25 +62,26 @@ INSERT INTO pokemones (numero_pokedex, nombre, tipo_id, nivel, hp, ataque, defen
 
 
 --Usuario para la Base de Datos y permisos
-CREATE USER user_pokemon WITH PASSWORD 'T#9vQ!2mL@7xR$4kZ&8pN^5wC*1jY';
+CREATE USER user_pokemon2 WITH PASSWORD 'T#9vQ!2mL@7xR$4kZ&8pN^5wC*1jY';
 
-GRANT CONNECT ON DATABASE Pokemon_db TO user_pokemon;
+GRANT CONNECT ON DATABASE "Pokemon_db" TO user_pokemon2;
 
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO user_pokemon;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO user_pokemon;
 
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO user_pokemon;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO user_pokemon;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON PROCEDURES TO user_pokemon;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TRIGGER FUNCTIONS TO user_pokemon;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO user_pokemon;
 
 -- Funcion para obtener un pokemon específico por su ID
+DROP FUNCTION IF EXISTS obtener_pokemon_por_id(INTEGER);
+
 CREATE OR REPLACE FUNCTION obtener_pokemon_por_id(p_id_buscado INTEGER)
 RETURNS TABLE(
     p_id INTEGER,
     p_numero_pokedex INTEGER,
     p_nombre VARCHAR,
-    p_tipo VARCHAR,  
+    p_tipo VARCHAR,  -- Cambiado
     p_nivel INTEGER,
     p_hp INTEGER,
     p_ataque INTEGER,
