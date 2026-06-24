@@ -50,6 +50,7 @@ public class Main {
             System.out.println("Velocidad: " + pokemon.getVelocidad());
         } else {
             System.out.println("No se encontro ningun Pokemon con ese ID.");
+            
         }
     }
 }
