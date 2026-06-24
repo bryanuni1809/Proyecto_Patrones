@@ -1,22 +1,21 @@
+package com.mycompany.Model.pokedex;
 
-package com.pokemon.model.pokedex;
-
-import com.pokemon.model.pokemon.Pokemon;
-import java.util.ArrayList;
+import com.mycompany.Model.pokemon.Pokemon;
+import com.mycompany.SQL_Conexion.PokemonDBQ;
 import java.util.List;
 
 /**
  * Gestiona el registro global de Pokémon mediante el patrón Singleton.
  */
-
 public class Pokedex {
+
     private static Pokedex instancia;
 
-    private List<Pokemon> pokemones;
+    private final List<Pokemon> pokemones;
+    PokemonDBQ bQ= new PokemonDBQ();
 
     private Pokedex() {
-
-        pokemones = new ArrayList<>();
+        pokemones = bQ.obtenerListaPokemon();
     }
 
     public static Pokedex getInstancia() {
@@ -26,6 +25,15 @@ public class Pokedex {
         }
 
         return instancia;
+    }
+
+    public Pokemon buscarporNombre(String nombre) {
+        for (Pokemon pk : pokemones) {
+            if (pk.getNombre().toLowerCase().contains(nombre.toLowerCase())) {
+                return pk;
+            }
+        }
+        return null;
     }
 
     public void agregarPokemon(Pokemon pokemon) {

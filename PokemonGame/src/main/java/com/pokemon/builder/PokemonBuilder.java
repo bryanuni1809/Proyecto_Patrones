@@ -1,8 +1,8 @@
 
 package com.pokemon.builder;
 
-import com.pokemon.model.pokemon.Pokemon;
-import com.pokemon.model.pokemon.TipoPokemon;
+import com.mycompany.Model.pokemon.Pokemon;
+import com.mycompany.Model.pokemon.TipoPokemon;
 
 /**
  * Construye objetos Pokemon utilizando el patrón Builder.

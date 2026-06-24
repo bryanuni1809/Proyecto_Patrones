@@ -1,7 +1,7 @@
 
-package com.pokemon.model.entrenador;
+package com.mycompany.Model.entrenador;
 
-import com.pokemon.model.pokemon.Pokemon;
+import com.mycompany.Model.pokemon.Pokemon;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,9 +1,9 @@
 
-package com.pokemon.factory;
+package com.mycompany.Patrones.factory;
 
+import com.mycompany.Model.pokemon.Pokemon;
+import com.mycompany.Model.pokemon.TipoPokemon;
 import com.pokemon.builder.PokemonBuilder;
-import com.pokemon.model.pokemon.Pokemon;
-import com.pokemon.model.pokemon.TipoPokemon;
 
 /**
  * Centraliza la creación de Pokémon mediante el patrón Factory Method.

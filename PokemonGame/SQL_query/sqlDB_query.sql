@@ -72,33 +72,33 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO user_pokemon;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO user_pokemon;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO user_pokemon;
 
--- Funcion para obtener un pokemon específico por su ID
-CREATE OR REPLACE FUNCTION obtener_pokemon_por_id(p_id_buscado INTEGER)
-RETURNS TABLE(
+
+-- Funcion para obtener todos los pokemones 
+CREATE OR REPLACE FUNCTION obtener_todos_pokemon()
+RETURNS TABLE (
     p_id INTEGER,
     p_numero_pokedex INTEGER,
     p_nombre VARCHAR,
-    p_tipo VARCHAR,  -- Cambiado
+    p_tipo VARCHAR,
     p_nivel INTEGER,
     p_hp INTEGER,
     p_ataque INTEGER,
     p_defensa INTEGER,
     p_velocidad INTEGER
 ) AS $$
-BEGIN
-    RETURN QUERY
     SELECT 
-        pk.id,
-        pk.numero_pokedex,
-        pk.nombre,
-        t.nombre AS tipo,
-        pk.nivel,
-        pk.hp,
-        pk.ataque,
-        pk.defensa,
-        pk.velocidad
+        pk.id AS p_id,
+        pk.numero_pokedex AS p_numero_pokedex,
+        pk.nombre AS p_nombre,
+        t.nombre AS p_tipo,
+        pk.nivel AS p_nivel,
+        pk.hp AS p_hp,
+        pk.ataque AS p_ataque,
+        pk.defensa AS p_defensa,
+        pk.velocidad AS p_velocidad
     FROM pokemones pk
     INNER JOIN tipos t ON pk.tipo_id = t.id
-    WHERE pk.id = p_id_buscado;
-END;
-$$ LANGUAGE plpgsql;
+    ORDER BY pk.id;
+$$ LANGUAGE SQL;
+
+select * from obtener_todos_pokemon();

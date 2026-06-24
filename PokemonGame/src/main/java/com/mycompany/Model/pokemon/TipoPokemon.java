@@ -1,5 +1,5 @@
 
-package com.pokemon.model.pokemon;
+package com.mycompany.Model.pokemon;
 
 /**
  * Enum que define los tipos de Pokémon disponibles en el juego.
