@@ -40,77 +40,24 @@ public class Pokemon {
         this.velocidad = velocidad;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getNumeroPokedex() {
-        return numeroPokedex;
-    }
-
-    public void setNumeroPokedex(int numeroPokedex) {
-        this.numeroPokedex = numeroPokedex;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public TipoPokemon getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(TipoPokemon tipo) {
-        this.tipo = tipo;
-    }
-
-    public int getNivel() {
-        return nivel;
-    }
-
-    public void setNivel(int nivel) {
-        this.nivel = nivel;
-    }
-
-    public int getHp() {
-        return hp;
-    }
-
-    public void setHp(int hp) {
-        this.hp = hp;
-    }
-
-    public int getAtaque() {
-        return ataque;
-    }
-
-    public void setAtaque(int ataque) {
-        this.ataque = ataque;
-    }
-
-    public int getDefensa() {
-        return defensa;
-    }
-
-    public void setDefensa(int defensa) {
-        this.defensa = defensa;
-    }
-
-    public int getVelocidad() {
-        return velocidad;
-    }
-
-    public void setVelocidad(int velocidad) {
-        this.velocidad = velocidad;
-    }
+    public int getId() {return id;}
+    public void setId(int id) {this.id = id;}
+    public void setNumeroPokedex(int numeroPokedex) {this.numeroPokedex = numeroPokedex;}
+    public int getNumeroPokedex() {return numeroPokedex;}
+    public String getNombre() {return nombre;}
+    public void setNombre(String nombre) {this.nombre = nombre;}
+    public TipoPokemon getTipo() {return tipo;}
+    public void setTipo(TipoPokemon tipo) {this.tipo = tipo;}
+    public int getNivel() {return nivel;}
+    public void setNivel(int nivel) {this.nivel = nivel;}
+    public int getHp() {return hp;}
+    public void setHp(int hp) {this.hp = hp;}
+    public int getAtaque() {return ataque;}
+    public void setAtaque(int ataque) {this.ataque = ataque;}
+    public int getDefensa() {return defensa;}
+    public void setDefensa(int defensa) {this.defensa = defensa;}
+    public int getVelocidad() {return velocidad;}
+    public void setVelocidad(int velocidad) {this.velocidad = velocidad;}
 
     @Override
     public String toString() {
