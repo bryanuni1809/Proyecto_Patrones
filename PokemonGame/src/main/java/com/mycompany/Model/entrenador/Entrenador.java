@@ -11,12 +11,12 @@ import java.util.List;
 
 public class Entrenador {
    private String nombre;
-    private List<Pokemon> equipo;
+    private Pokemon[] equipo;
 
     public Entrenador(String nombre) {
 
         this.nombre = nombre;
-        this.equipo = new ArrayList<>();
+        this.equipo = new Pokemon[3];
     }
 
     public String getNombre() {
@@ -27,16 +27,14 @@ public class Entrenador {
         this.nombre = nombre;
     }
 
-    public List<Pokemon> getEquipo() {
+    public Pokemon[] getEquipo() {
         return equipo;
     }
 
     public void agregarPokemon(Pokemon pokemon) {
 
-        if (equipo.size() < 6) {
-            equipo.add(pokemon);
-        } else {
-            System.out.println("Equipo completo");
+        for (Pokemon pokemon1 : equipo) {
+            pokemon1 = pokemon;
         }
     } 
 }

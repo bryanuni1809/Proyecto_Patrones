@@ -1,6 +1,4 @@
-
 package com.mycompany.Model.pokemon;
-
 /**
  * Representa un Pokémon con sus datos y estadísticas principales.
  */
