@@ -1,4 +1,3 @@
-
 package com.pokemon.builder;
 
 import com.mycompany.Model.pokemon.Pokemon;
