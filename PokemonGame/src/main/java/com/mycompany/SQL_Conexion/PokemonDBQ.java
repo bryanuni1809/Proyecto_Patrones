@@ -10,19 +10,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PokemonDBQ {
-
+    /**
+     * Antes: se creaba un Pokemon() vacio y se llenaba con 9 setters.
+     * Ahora: se usa el patrin builder para armar el objeto de forma.
+     * El estado inicial no se especifica, por lo
+     * que el Builder lo deja en EstadoNormal por defecto.
+     *
+     * Extrae los datos de la fila actual de un ResultSet y construye un objeto pokemon
+     *
+     * rs El ResultSet posicionado en la fila válida de la cual se leerán los datos.
+     * Un objeto Pokemon completamente instanciado con los datos de la BD.
+     * SQLException Si ocurre un error al acceder a las columnas del ResultSet
+     */
     private Pokemon encontrarPokemon(ResultSet rs) throws SQLException {
-        Pokemon pokemon = new Pokemon();
-        pokemon.setId(rs.getInt("p_id"));
-        pokemon.setNumeroPokedex(rs.getInt("p_numero_pokedex"));
-        pokemon.setNombre(rs.getString("p_nombre"));
-        pokemon.setTipo(TipoPokemon.valueOf(rs.getString("p_tipo").toUpperCase()));
-        pokemon.setNivel(rs.getInt("p_nivel"));
-        pokemon.setHp(rs.getInt("p_hp"));
-        pokemon.setAtaque(rs.getInt("p_ataque"));
-        pokemon.setDefensa(rs.getInt("p_defensa"));
-        pokemon.setVelocidad(rs.getInt("p_velocidad"));
-        return pokemon;
+        return new PokemonBuilder()
+                .conId(rs.getInt("p_id"))
+                .conNumeroPokedex(rs.getInt("p_numero_pokedex"))
+                .conNombre(rs.getString("p_nombre"))
+                .conTipo(TipoPokemon.valueOf(rs.getString("p_tipo").toUpperCase()))
+                .conNivel(rs.getInt("p_nivel"))
+                .conHp(rs.getInt("p_hp"))
+                .conAtaque(rs.getInt("p_ataque"))
+                .conDefensa(rs.getInt("p_defensa"))
+                .conVelocidad(rs.getInt("p_velocidad"))
+                .build();
     }
 
     public List<Pokemon> obtenerListaPokemon() {

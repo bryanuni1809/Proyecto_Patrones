@@ -4,10 +4,11 @@ import com.mycompany.Model.pokemon.Pokemon;
 import com.mycompany.Model.pokemon.TipoPokemon;
 
 /**
- * Construye objetos Pokemon utilizando el patrón Builder.
+ * Construye objetos Pokemon utilizando el patron Builder.
  */
 
 public class PokemonBuilder {
+
     private int id;
     private int numeroPokedex;
     private String nombre;
@@ -18,63 +19,71 @@ public class PokemonBuilder {
     private int defensa;
     private int velocidad;
 
-    public PokemonBuilder setId(int id) {
+    // Estado alterado con el que nace el pokemon y por defecto es normal
+    private EstadoPokemon estadoInicial = new EstadoNormal();
+
+    public PokemonBuilder conId(int id) {
         this.id = id;
         return this;
     }
 
-    public PokemonBuilder setNumeroPokedex(int numeroPokedex) {
+    public PokemonBuilder conNumeroPokedex(int numeroPokedex) {
         this.numeroPokedex = numeroPokedex;
         return this;
     }
 
-    public PokemonBuilder setNombre(String nombre) {
+    public PokemonBuilder conNombre(String nombre) {
         this.nombre = nombre;
         return this;
     }
 
-    public PokemonBuilder setTipo(TipoPokemon tipo) {
+    public PokemonBuilder conTipo(TipoPokemon tipo) {
         this.tipo = tipo;
         return this;
     }
-    
-    public PokemonBuilder setNivel(int nivel) {
-    this.nivel = nivel;
-    return this;
+
+    public PokemonBuilder conNivel(int nivel) {
+        this.nivel = nivel;
+        return this;
     }
 
-    public PokemonBuilder setHp(int hp) {
+    public PokemonBuilder conHp(int hp) {
         this.hp = hp;
         return this;
     }
 
-    public PokemonBuilder setAtaque(int ataque) {
+    public PokemonBuilder conAtaque(int ataque) {
         this.ataque = ataque;
         return this;
     }
 
-    public PokemonBuilder setDefensa(int defensa) {
+    public PokemonBuilder conDefensa(int defensa) {
         this.defensa = defensa;
         return this;
     }
 
-    public PokemonBuilder setVelocidad(int velocidad) {
+    public PokemonBuilder conVelocidad(int velocidad) {
         this.velocidad = velocidad;
         return this;
     }
 
-    public Pokemon build() {
+    /**
+     * Define el estado alterado inicial (pattron State).
+     * Si no se llama, el Pokémon se construye en EstadoNormal.
+     */
+    public PokemonBuilder conEstadoInicial(EstadoPokemon estadoInicial) {
+        this.estadoInicial = estadoInicial;
+        return this;
+    }
 
-        return new Pokemon(
-            id,
-            numeroPokedex,
-            nombre,
-            tipo,
-            nivel,
-            hp,
-            ataque,
-            defensa,
-            velocidad
+    /**
+     * Construye el pokemon final, ya con su estado inicial asignado.
+     */
+    public Pokemon build() {
+        Pokemon pokemon = new Pokemon(
+                id, numeroPokedex, nombre, tipo, nivel, hp, ataque, defensa, velocidad
         );
+        pokemon.setEstado(estadoInicial);
+        return pokemon;
     }
 }
