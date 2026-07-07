@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 /**
  * Clase encargada de las consultas a la base de datos relacionadas con los Pokemon.
  *
