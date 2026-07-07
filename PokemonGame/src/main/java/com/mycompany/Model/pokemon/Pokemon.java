@@ -72,7 +72,6 @@ public class Pokemon implements Prototype<Pokemon> {
 
     /**
      * Clona este Pokémon creando una nueva instancia con los mismos stats.
-     *
      * El clon tiene su propio HP actual y estado (Normal), de forma que
      * modificar el clon no afecta al original.
      *
