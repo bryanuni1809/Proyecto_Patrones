@@ -3,7 +3,7 @@ import com.mycompany.Model.pokemon.Pokemon;
 import java.util.List;
 
 public final class CombateMemento {
-    /*
+
     private final List<Integer> hpList;
     private final Pokemon[] equipo;
     private final Estado estado;
@@ -23,6 +23,5 @@ public final class CombateMemento {
         List<Integer> energies = pokemons.stream().map(Pokemon::getEnergy).toList();
         return new CombateMemento(hps, energies, turno);
     }
-*/
 }
 
