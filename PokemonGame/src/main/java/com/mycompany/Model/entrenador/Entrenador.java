@@ -1,3 +1,4 @@
+
 package com.mycompany.Model.entrenador;
 
 import com.mycompany.Model.pokemon.Pokemon;
@@ -22,31 +23,35 @@ import java.util.List;
  *              o agrupado; solo llama a usar() y getCantidad().
  * SOLID → LSP: cualquier ItemMochila (hoja o compuesto) es intercambiable.
  */
-public class Entrenador {
 
-    private String nombre;
-    private List<Pokemon> equipo;
+public class Entrenador {
+   private String nombre;
+    private Pokemon[] equipo;
 
     /** Raíz del árbol Composite: la mochila completa del entrenador. */
     private MochilaGrupo mochila;
 
     public Entrenador(String nombre) {
         this.nombre = nombre;
+        this.equipo = new Pokemon[3];
         this.equipo = new ArrayList<>();
         this.mochila = new MochilaGrupo("Mochila de " + nombre);
     }
 
     // ── Gestión del equipo ────────────────────────────────────────────────
 
-    /**
-     * Agrega un Pokémon al equipo (máximo 6).
-     */
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Pokemon[] getEquipo() {
+        return equipo;
+    }
+
     public void agregarPokemon(Pokemon pokemon) {
-        if (equipo.size() < 6) {
-            equipo.add(pokemon);
-            System.out.println(nombre + " agregó a " + pokemon.getNombre() + " a su equipo.");
-        } else {
-            System.out.println("Equipo completo. No se puede agregar " + pokemon.getNombre() + ".");
+
+        for (Pokemon pokemon1 : equipo) {
+            pokemon1 = pokemon;
         }
     }
 

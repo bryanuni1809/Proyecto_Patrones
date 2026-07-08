@@ -42,7 +42,6 @@ public class Pokemon implements Prototype<Pokemon> {
     // ── Constructores ─────────────────────────────────────────────────────
 
     public Pokemon() {
-        this.estado = new EstadoNormal();
     }
 
     public Pokemon(int id,
@@ -171,6 +170,7 @@ public class Pokemon implements Prototype<Pokemon> {
 
     @Override
     public String toString() {
+
         return "Pokemon{" +
                 "id=" + id +
                 ", numeroPokedex=" + numeroPokedex +
