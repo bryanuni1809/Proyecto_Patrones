@@ -2,6 +2,8 @@ package com.pokemon.builder;
 
 import com.mycompany.Model.pokemon.Pokemon;
 import com.mycompany.Model.pokemon.TipoPokemon;
+import com.mycompany.Patrones.state.EstadoNormal;
+import com.mycompany.Patrones.state.EstadoPokemon;
 // ── Patrón Builder: delegación al estado actual ─────────────────────────
 /**
  * Construye objetos Pokemon utilizando el patrón Builder.
@@ -80,6 +82,7 @@ public class PokemonBuilder {
      * Define el estado alterado inicial (pattron State).
      * Si no se llama, el pokemon se construye en EstadoNormal.
      * Probablemente no sea necesario mas adelante !! RECORDATORIO POR SI SE TIENE QUE BORRAR
+     * @param estadoInicial
      */
     public PokemonBuilder conEstadoInicial(EstadoPokemon estadoInicial) {
         this.estadoInicial = estadoInicial;

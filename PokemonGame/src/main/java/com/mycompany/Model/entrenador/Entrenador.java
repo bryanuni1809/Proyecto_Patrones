@@ -5,6 +5,7 @@ import com.mycompany.Model.pokemon.Pokemon;
 import com.mycompany.Patrones.composite.ItemMochila;
 import com.mycompany.Patrones.composite.MochilaGrupo;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,20 +35,25 @@ public class Entrenador {
     public Entrenador(String nombre) {
         this.nombre = nombre;
         this.equipo = new Pokemon[3];
-        this.equipo = new ArrayList<>();
         this.mochila = new MochilaGrupo("Mochila de " + nombre);
     }
 
-    // ── Gestión del equipo ────────────────────────────────────────────────
+    // ── Getters y Setters ─────────────────────────────────────────────────
 
+    public String getNombre() { return nombre; }
+    
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
+    public MochilaGrupo getMochila() { return mochila; }
+
+
     public Pokemon[] getEquipo() {
         return equipo;
     }
-
+    
+    // ── Gestión del equipo ────────────────────────────────────────────────
     public void agregarPokemon(Pokemon pokemon) {
 
         for (Pokemon pokemon1 : equipo) {
@@ -70,9 +76,11 @@ public class Entrenador {
 
     /**
      * Indica si todos los Pokémon del equipo están desmayados.
+     * @return 
      */
     public boolean equipoDerrotado() {
-        return equipo.stream().allMatch(Pokemon::estaDesmayado);
+        return Arrays.stream(equipo).allMatch(Pokemon::estaDesmayado);
+        
     }
 
     // ── Gestión de la mochila (Composite) ────────────────────────────────
@@ -87,6 +95,7 @@ public class Entrenador {
      *   MochilaGrupo pociones = new MochilaGrupo("Pociones");
      *   pociones.agregar(new Pocion("Poción", 3, 20));
      *   entrenador.agregarItem(pociones);
+     * @param item
      */
     public void agregarItem(ItemMochila item) {
         mochila.agregar(item);
@@ -116,17 +125,9 @@ public class Entrenador {
 
     /**
      * Devuelve el total de usos disponibles en toda la mochila.
+     * @return 
      */
     public int totalItemsMochila() {
         return mochila.getCantidad();
     }
-
-    // ── Getters y Setters ─────────────────────────────────────────────────
-
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-
-    public List<Pokemon> getEquipo() { return equipo; }
-
-    public MochilaGrupo getMochila() { return mochila; }
 }

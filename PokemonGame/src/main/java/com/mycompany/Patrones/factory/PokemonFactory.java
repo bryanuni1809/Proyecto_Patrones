@@ -22,15 +22,15 @@ public class PokemonFactory {
             int velocidad) {
 
         return new PokemonBuilder()
-                .setId(id)
-                .setNumeroPokedex(numeroPokedex)
-                .setNombre(nombre)
-                .setTipo(tipo)
-                .setNivel(nivel)
-                .setHp(hp)
-                .setAtaque(ataque)
-                .setDefensa(defensa)
-                .setVelocidad(velocidad)
+                .conId(id)
+                .conNumeroPokedex(numeroPokedex)
+                .conNombre(nombre)
+                .conTipo(tipo)
+                .conNivel(nivel)
+                .conHp(hp)
+                .conAtaque(ataque)
+                .conDefensa(defensa)
+                .conVelocidad(velocidad)
                 .build();
     }
 }

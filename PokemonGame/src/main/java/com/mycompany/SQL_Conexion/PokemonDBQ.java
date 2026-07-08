@@ -2,6 +2,7 @@ package com.mycompany.SQL_Conexion;
 
 import com.mycompany.Model.pokemon.Pokemon;
 import com.mycompany.Model.pokemon.TipoPokemon;
+import com.pokemon.builder.PokemonBuilder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
