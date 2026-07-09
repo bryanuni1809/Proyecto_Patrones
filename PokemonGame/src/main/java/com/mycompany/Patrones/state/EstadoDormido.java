@@ -4,8 +4,8 @@ import com.mycompany.Model.pokemon.Pokemon;
 import java.util.Random;
 
 /**
- * Estado Dormido: el Pokémon no puede atacar mientras duerme.
- * Se despierta aleatoriamente entre 1 y 3 turnos.
+ * Estado Dormido: el Pokémon no puede atacar mientras duerme. Se despierta
+ * aleatoriamente entre 1 y 3 turnos.
  *
  * Patrón State → al despertar, el estado cambia a EstadoNormal automáticamente.
  */
@@ -19,6 +19,12 @@ public class EstadoDormido implements EstadoPokemon {
         this.turnosRestantes = 1 + random.nextInt(3);
     }
 
+    // Constructor privado para la clonación exacta del estado actual
+    private EstadoDormido(int turnosRestantes) {
+        this.turnosRestantes = turnosRestantes;
+    }
+
+    //Getter
     @Override
     public String getNombre() {
         return "Dormido";
@@ -36,7 +42,7 @@ public class EstadoDormido implements EstadoPokemon {
                 System.out.println(pokemon.getNombre() + " se ha despertado!");
                 pokemon.setEstado(new EstadoNormal()); // Cambia de estado
             }
-            return false; // No puede atacar
+            return true; // Si puede atacar en ese mismo turno
         }
         return true;
     }
@@ -44,5 +50,10 @@ public class EstadoDormido implements EstadoPokemon {
     @Override
     public void alFinalTurno(Pokemon pokemon) {
         // No aplica efecto adicional al final del turno
+    }
+    
+    @Override
+    public EstadoPokemon clonar() {
+        return new EstadoDormido(this.turnosRestantes); // Mantiene los turnos que le quedaban
     }
 }

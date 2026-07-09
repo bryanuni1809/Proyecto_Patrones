@@ -7,8 +7,8 @@ import java.util.Random;
  * Estado Paralizado: el Pokémon tiene 25% de probabilidad de no poder atacar
  * cada turno. Además su velocidad se reduce a la mitad mientras dure.
  *
- * Patrón State → comportamiento dinámico en tiempo de ejecución.
- * SOLID → OCP: este comportamiento no modifica la clase Pokemon.
+ * Patrón State → comportamiento dinámico en tiempo de ejecución. SOLID → OCP:
+ * este comportamiento no modifica la clase Pokemon.
  */
 public class EstadoParalizado implements EstadoPokemon {
 
@@ -33,5 +33,15 @@ public class EstadoParalizado implements EstadoPokemon {
     public void alFinalTurno(Pokemon pokemon) {
         // La parálisis no se cura sola en este modelo
         System.out.println(pokemon.getNombre() + " sigue paralizado.");
+    }
+
+    @Override
+    public int modificarVelocidad(int velocidadBase) {
+        return velocidadBase / 2;
+    }
+
+    @Override
+    public EstadoPokemon clonar() {
+        return new EstadoParalizado(); // No tiene variables internas, clonación simple
     }
 }

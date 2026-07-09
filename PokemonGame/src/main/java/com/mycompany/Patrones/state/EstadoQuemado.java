@@ -3,11 +3,11 @@ package com.mycompany.Patrones.state;
 import com.mycompany.Model.pokemon.Pokemon;
 
 /**
- * Estado Quemado: el Pokémon puede atacar normalmente, pero pierde
- * 1/16 de su HP máximo al final de cada turno.
+ * Estado Quemado: el Pokémon puede atacar normalmente, pero pierde 1/16 de su
+ * HP máximo al final de cada turno.
  *
- * Patrón State → el daño por quemadura se aplica automáticamente
- * sin que Pokemon ni Combate contengan esta lógica.
+ * Patrón State → el daño por quemadura se aplica automáticamente sin que
+ * Pokemon ni Combate contengan esta lógica.
  */
 public class EstadoQuemado implements EstadoPokemon {
 
@@ -30,5 +30,10 @@ public class EstadoQuemado implements EstadoPokemon {
         pokemon.setHpActual(Math.max(0, hpActual));
         System.out.println(pokemon.getNombre() + " sufre " + danio
                 + " puntos de daño por quemadura! HP restante: " + pokemon.getHpActual());
+    }
+
+    @Override
+    public EstadoPokemon clonar() {
+        return new EstadoQuemado();
     }
 }
