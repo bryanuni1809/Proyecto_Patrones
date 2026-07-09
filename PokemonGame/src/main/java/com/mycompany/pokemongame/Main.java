@@ -32,7 +32,6 @@ public class Main {
 
         pokedex.getPokemones().forEach(System.out::println);
     
-
         // Llamamos a la función de PostgreSQL a través de nuestro método Java
         Pokedex pk=Pokedex.getInstancia();
         Pokemon pokemon= pk.buscarporNombre("pikachu");

@@ -79,5 +79,28 @@ public class MochilaGrupo implements ItemMochila {
             }
         }
     }
+    /**
+     * Busca de forma recursiva si un ítem exacto existe 
+     * dentro de este grupo o en cualquiera de sus subgrupos hijos.
+     * Requerido por el método usarItem de la clase Entrenador.
+     */
+    public boolean tieneItem(ItemMochila itemBuscado) { // Pregunta ¿Este objeto existe en alguna parte de la mochila?
+        if (this.items.contains(itemBuscado)) {
+            return true;
+        }
+
+        // 2. Si no, buscamos hacia abajo en cada subgrupo de manera recursiva
+        for (ItemMochila elemento : this.items) {
+            if (elemento instanceof MochilaGrupo) {
+                MochilaGrupo subGrupo = (MochilaGrupo) elemento;
+                if (subGrupo.tieneItem(itemBuscado)) {
+                    return true; // Encontrado en un subgrupo profundo
+                }
+            }
+        }
+
+        // 3. Si no apareció por ningún lado
+        return false;
+    }
 }
 

@@ -3,6 +3,9 @@ package com.mycompany.Model.pokemon;
 import com.mycompany.Patrones.prototype.Prototype;
 import com.mycompany.Patrones.state.EstadoNormal;
 import com.mycompany.Patrones.state.EstadoPokemon;
+import com.mycompany.Combate.Atk.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Representa un Pokémon con sus atributos y estado actual en batalla.
@@ -32,6 +35,7 @@ public class Pokemon implements Prototype<Pokemon> {
     private int ataque;
     private int defensa;
     private int velocidad;
+    private List<Ataque> ataques;
 
     // ── Atributos de batalla ──────────────────────────────────────────────
     private int hpActual; // HP actual durante el combate
@@ -65,6 +69,7 @@ public class Pokemon implements Prototype<Pokemon> {
         this.defensa = defensa;
         this.velocidad = velocidad;
         this.estado = new EstadoNormal(); // Estado inicial: sin alteraciones
+        this.ataques = new ArrayList<>(); // Lista para guardar los ataques 
     }
 
     // ── Patrón Prototype ──────────────────────────────────────────────────
@@ -93,6 +98,7 @@ public class Pokemon implements Prototype<Pokemon> {
         // El clon empieza con HP completo y sin estado alterado
         clon.hpActual = this.hp;
         clon.estado = new EstadoNormal();
+        clon.ataques.addAll(this.ataques);
         return clon;
     }
 
@@ -167,6 +173,14 @@ public class Pokemon implements Prototype<Pokemon> {
 
     public int getVelocidad() { return velocidad; }
     public void setVelocidad(int velocidad) { this.velocidad = velocidad; }
+    
+    public List<Ataque> getAtaques() {
+        return ataques;
+    }
+
+    public void setAtaques(List<Ataque> ataques) {
+        this.ataques = ataques;
+    }
 
     @Override
     public String toString() {
@@ -184,5 +198,9 @@ public class Pokemon implements Prototype<Pokemon> {
                 ", velocidad=" + velocidad +
                 ", estado=" + estado.getNombre() +
                 '}';
+    }
+    //Metodos para el ataque
+    public void agregarAtaque(Ataque ataque) {
+        ataques.add(ataque);
     }
 }

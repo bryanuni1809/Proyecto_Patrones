@@ -1,6 +1,7 @@
 package com.mycompany.Patrones.state;
 
 import com.mycompany.Model.pokemon.Pokemon;
+import com.mycompany.Patrones.prototype.Prototype;
 
 /**
  * Interfaz del patrón State para estados alterados de un Pokémon.
@@ -13,7 +14,7 @@ import com.mycompany.Model.pokemon.Pokemon;
  * sin modificar Pokemon ni los estados existentes.
  * SOLID → LSP: cualquier EstadoPokemon es intercambiable en Pokemon.
  */
-public interface EstadoPokemon {
+public interface EstadoPokemon extends Prototype<EstadoPokemon> {
 
     /**
      * Nombre descriptivo del estado, para mostrar en consola o UI.
@@ -36,4 +37,19 @@ public interface EstadoPokemon {
      * @param pokemon el Pokémon que tiene este estado
      */
     void alFinalTurno(Pokemon pokemon);
+    
+    /**
+     * Permite modificar las estadísticas base del Pokémon (como la velocidad en parálisis)
+     * de forma dinámica en tiempo de ejecución.
+     * Por defecto devuelve el stat original sin cambios.
+     */
+    default int modificarVelocidad(int velocidadBase) {
+        return velocidadBase;
+    }
+
+    /**
+     * Exigencia del patrón Prototype para clonar el estado de forma polimórfica.
+     */
+    @Override
+    EstadoPokemon clonar();
 }

@@ -12,10 +12,25 @@ public class Calculadora {
         }
         return instancia;
     }
+    // Ataque físico (sin tipos)
+    public int calcularDanioFisico(Pokemon atacante, Pokemon defensor, int potencia) {
 
-    public int calcularDanio(Pokemon atacante, Pokemon defensor, int poderBase, TablaTipos tabla) {
-        double multiplicador = tabla.getMultiplicador(atacante.getTipo(), defensor.getTipo());
-        int danio = (int) ((poderBase + atacante.getAtaque() - defensor.getDefensa()) * multiplicador);
-        return Math.max(danio, 0); // nunca negativo
+        int danio = (atacante.getAtaque() * potencia) / defensor.getDefensa();
+
+        return Math.max(danio, 1);
+    }
+
+    // Ataque especial (con tipos)
+    public int calcularDanioEspecial(Pokemon atacante, Pokemon defensor, int potencia, TipoPokemon tipoAtaque, TablaTipos tabla) {
+
+        double multiplicador = tabla.getMultiplicador(
+                tipoAtaque,
+                defensor.getTipo()
+        );
+
+        int danio = (int) (((atacante.getAtaque() * potencia)
+                / defensor.getDefensa()) * multiplicador);
+
+        return Math.max(danio, 1);
     }
 }
