@@ -30,7 +30,7 @@ public class MochilaGrupo implements ItemMochila {
     public void agregar(ItemMochila item) {
         items.add(item);
     }
-
+    
     /** Elimina un ítem de la colección. */
     public void eliminar(ItemMochila item) {
         items.remove(item);
