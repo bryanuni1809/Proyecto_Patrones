@@ -5,27 +5,24 @@ import com.mycompany.Model.pokemon.Pokemon;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Combate {
+public class Combate implements CombateCallback {
 
-    //Atributos
     private Entrenador entrenador1;
     private Entrenador entrenador2;
+    private CombateMemento mementoInicial;
     private List<CombateObservador> observadores;
-    private int turnosPokemon1;
-    private int turnosPokemon2;
     private int turnoGeneral;
 
     public Combate(Entrenador entrenador1, Entrenador entrenador2, List<CombateObservador> observadoresIniciales) {
         this.entrenador1 = entrenador1;
         this.entrenador2 = entrenador2;
-        this.observadores = observadoresIniciales;
-        this.turnosPokemon1 = 0;
-        this.turnosPokemon2 = 0;
+        // Aseguramos lista no nula para evitar NPE al registrar observadores
+        this.observadores = (observadoresIniciales != null) ? observadoresIniciales : new ArrayList<>();
         this.turnoGeneral = 1;
     }
 
-    public void registrarObservador(CombateObservador o) { //permite agregar nuevos observadores
-        observadores.add(o);
+    public void registrarObservador(CombateObservador o) {
+        if (o != null) observadores.add(o);
     }
 
     private void notificarCambioTurno(Pokemon p) {
@@ -34,19 +31,22 @@ public class Combate {
         }
     }
 
-    private void notificarAtaque(Pokemon atacante, Pokemon defensor, String ataque, int damage) {
+    @Override
+    public void notificarAtaque(Pokemon atacante, Pokemon defensor, String ataque, int damage) {
         for (CombateObservador o : observadores) {
             o.onAtaqueRealizado(atacante, defensor, ataque, damage);
         }
     }
 
-    private void notificarPokemonDebilitado(Pokemon p) {
+    @Override
+    public void notificarPokemonDebilitado(Pokemon p) {
         for (CombateObservador o : observadores) {
             o.onPokemonDebilitado(p);
         }
     }
 
-    private void notificarCambio(Pokemon viejo, Pokemon nuevo, String motivo) {
+    @Override
+    public void notificarCambio(Pokemon viejo, Pokemon nuevo, String motivo) {
         for (CombateObservador o : observadores) {
             o.onPokemonCambiado(viejo, nuevo, motivo);
         }
@@ -58,13 +58,40 @@ public class Combate {
         }
     }
 
+    // Guardar estado inicial (llamar antes de iniciarBatalla o al inicio de la misma)
+    public void guardarEstadoInicial() {
+        List<Entrenador> copia = new ArrayList<>();
+        copia.add(entrenador1.clonar());
+        copia.add(entrenador2.clonar());
+        mementoInicial = new CombateMemento(turnoGeneral, copia);
+    }
+
+    // Restaurar desde el memento inicial
+    public void restaurarEstadoInicial() {
+        if (mementoInicial == null) return;
+        this.turnoGeneral = mementoInicial.getTurnoGeneral();
+        List<Entrenador> copia = mementoInicial.getEntrenadoresClonados();
+        this.entrenador1 = copia.get(0);
+        this.entrenador2 = copia.get(1);
+    }
+
+    // Reiniciar y volver a iniciar la batalla desde el estado inicial
+    public void reiniciarDesdeInicio() {
+        restaurarEstadoInicial();
+        iniciarBatalla();
+    }
+
     public void iniciarBatalla() {
+        if (mementoInicial == null) {
+            guardarEstadoInicial();
+        }
+
         System.out.println("¡Inicia el encuentro " + entrenador1.getNombre() + " vs " + entrenador2.getNombre() + "!");
-        while (!entrenador1.equipoDerrotado() && !entrenador2.equipoDerrotado()) { //Mientras ninguno haya perdido 
-            Pokemon p1 = entrenador1.getPokemonActivo(); //Obtiene los pokemons activos 
+        while (!entrenador1.equipoDerrotado() && !entrenador2.equipoDerrotado()) {
+            Pokemon p1 = entrenador1.getPokemonActivo();
             Pokemon p2 = entrenador2.getPokemonActivo();
 
-            if (p1.getVelocidad() >= p2.getVelocidad()) { // Decide quien ataca primero
+            if (p1.getVelocidad() >= p2.getVelocidad()) {
                 ejecutarAccion(entrenador1, p1, entrenador2, p2);
                 if (!p2.estaDesmayado() && !p1.estaDesmayado()) {
                     ejecutarAccion(entrenador2, p2, entrenador1, p1);
@@ -75,20 +102,16 @@ public class Combate {
                     ejecutarAccion(entrenador1, p1, entrenador2, p2);
                 }
             }
-            if (!p1.estaDesmayado()) { // Efectos de final de turno (ej. Daño por quemadura)
-                p1.finalTurno();
-            }
-            if (!p2.estaDesmayado()) {
-                p2.finalTurno();
-            }
-            verificarEstadoPokemon(entrenador1); //Verificar desmayos acumulados tras los efectos del final del turno
+
+            if (!p1.estaDesmayado()) p1.finalTurno();
+            if (!p2.estaDesmayado()) p2.finalTurno();
+
+            verificarEstadoPokemon(entrenador1);
             verificarEstadoPokemon(entrenador2);
 
-            chequearLimiteDeTurnos(entrenador1); // Control de rotación obligatoria
-            chequearLimiteDeTurnos(entrenador2);
-
-            turnoGeneral++; //Aumenta turno general 
+            turnoGeneral++;
         }
+
         if (!entrenador1.equipoDerrotado()) {
             notificarFin(entrenador1.getNombre());
         } else {
@@ -99,69 +122,34 @@ public class Combate {
     private void ejecutarAccion(Entrenador atacanteEnt, Pokemon atacante, Entrenador defensorEnt, Pokemon defensor) {
         notificarCambioTurno(atacante);
 
-        if (atacanteEnt == entrenador1) {
-            turnosPokemon1++;
-        } else {
-            turnosPokemon2++;
-        }
         if (atacante.iniciarTurno()) {
             if (!atacante.getAtaques().isEmpty()) {
-                Ataque ataque = atacante.getAtaques().get(0); // Por ahora usa el primer ataque disponible del listado
+                Ataque ataqueElegido = atacanteEnt.elegirAtaque(atacante);
 
-                int hpPrevio = defensor.getHpActual(); //Guarda el hp antes del ataque 
-                ataque.atacar(atacante, defensor);
-                int danioRecibido = hpPrevio - defensor.getHpActual();
-
-                notificarAtaque(atacante, defensor, ataque.nombre, danioRecibido);//notifica al observador
-                verificarEstadoPokemon(defensorEnt);  // Verificar si el defensor murió por el impacto inmediato del ataque
+                AtaqueComand cmd = new AtaqueComand(ataqueElegido, atacante, defensor, defensorEnt, this);
+                cmd.ejecutar();
             }
         }
     }
 
-    private void verificarEstadoPokemon(Entrenador entrenador) {
+    @Override
+    public void verificarEstadoPokemon(Entrenador entrenador) {
         Pokemon p = entrenador.getPokemonActivo();
         if (p != null && p.estaDesmayado()) {
             notificarPokemonDebilitado(p);
-            resetearTurnos(entrenador); //reinicia los turnos
-            
+
             if (!entrenador.equipoDerrotado()) {
                 Pokemon nuevo = entrenador.sacarSiguientePokemon();
                 notificarCambio(p, nuevo, "se desmayo");
             }
         }
     }
-    
-
-    private void chequearLimiteDeTurnos(Entrenador entrenador) {
-        int turnosActivos = (entrenador == entrenador1) ? turnosPokemon1 : turnosPokemon2;
-        Pokemon actual = entrenador.getPokemonActivo();
-
-        if (actual != null && !actual.estaDesmayado() && turnosActivos >= 3 && tienePokemonDeReserva(entrenador)) { 
-            Pokemon viejo = actual;
-            resetearTurnos(entrenador);
-
-            Pokemon nuevo = entrenador.sacarSiguientePokemon();
-            notificarCambio(viejo, nuevo, "cumplio el limite de 3 turnos");
-
-        }
-    }
 
     private boolean tienePokemonDeReserva(Entrenador e) {
         int vivos = 0;
         for (Pokemon p : e.getEquipo()) {
-            if (p != null && !p.estaDesmayado()) {
-                vivos++;
-            }
+            if (p != null && !p.estaDesmayado()) vivos++;
         }
         return vivos > 1;
     }
-
-    private void resetearTurnos(Entrenador e) {
-        if (e == entrenador1) {
-            turnosPokemon1 = 0;
-        } else {
-            turnosPokemon2 = 0;
-        }
-    }
-
 }
