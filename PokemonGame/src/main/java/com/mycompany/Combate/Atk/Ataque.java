@@ -11,9 +11,9 @@ public abstract class Ataque implements Prototype<Ataque>{ // Se utiliza el patr
     protected TipoPokemon tipo;
     // El constructor ahora es protegido y recibe el Builder genérico
     protected Ataque(Builder<?> builder) {
-        this.nombre = builder.nombre;
         this.potencia = builder.potencia;
         this.tipo = builder.tipo;
+        this.nombre = "Ataque especial tipo: " + tipo;
     }
 
     //Metodo abstracto
@@ -41,6 +41,10 @@ public abstract class Ataque implements Prototype<Ataque>{ // Se utiliza el patr
 
         public abstract Ataque build();
         protected abstract T self();
+    }
+
+    public String getNombre() {
+        return nombre;
     }
 
 }

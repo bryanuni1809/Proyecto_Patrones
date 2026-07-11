@@ -5,7 +5,7 @@ import com.mycompany.Model.pokemon.Pokemon;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Combate {
+public class Combate implements CombateCallback{
 
     //Atributos
     private Entrenador entrenador1;
@@ -29,20 +29,23 @@ public class Combate {
             o.onCambioTurno(turnoGeneral, p);
         }
     }
-
-    private void notificarAtaque(Pokemon atacante, Pokemon defensor, String ataque, int damage) {
+    
+    @Override
+    public void notificarAtaque(Pokemon atacante, Pokemon defensor, String ataque, int damage) {
         for (CombateObservador o : observadores) {
             o.onAtaqueRealizado(atacante, defensor, ataque, damage);
         }
     }
 
-    private void notificarPokemonDebilitado(Pokemon p) {
+    @Override
+    public void notificarPokemonDebilitado(Pokemon p) {
         for (CombateObservador o : observadores) {
             o.onPokemonDebilitado(p);
         }
     }
 
-    private void notificarCambio(Pokemon viejo, Pokemon nuevo, String motivo) {
+    @Override
+    public void notificarCambio(Pokemon viejo, Pokemon nuevo, String motivo) {
         for (CombateObservador o : observadores) {
             o.onPokemonCambiado(viejo, nuevo, motivo);
         }
@@ -94,19 +97,20 @@ public class Combate {
 
         if (atacante.iniciarTurno()) {
             if (!atacante.getAtaques().isEmpty()) {
-                Ataque ataque = atacante.getAtaques().get(0); // Por ahora usa el primer ataque disponible del listado
+                Ataque ataqueElegido = atacanteEnt.elegirAtaque(atacante);
 
-                int hpPrevio = defensor.getHpActual(); //Guarda el hp antes del ataque 
-                ataque.atacar(atacante, defensor);
-                int danioRecibido = hpPrevio - defensor.getHpActual();
-
-                notificarAtaque(atacante, defensor, ataque.nombre, danioRecibido);//notifica al observador
-                verificarEstadoPokemon(defensorEnt);  // Verificar si el defensor murió por el impacto inmediato del ataque
+                // Crear el comando y delegar la ejecución
+                AtaqueComand cmd = new AtaqueComand(ataqueElegido, atacante, defensor, defensorEnt, this);
+                cmd.ejecutar();
+                
+                // ya no necesitas calcular daño ni llamar verificarEstadoPokemon aquí:
+                // el comando lo hizo solo
             }
         }
     }
 
-    private void verificarEstadoPokemon(Entrenador entrenador) {
+    @Override
+    public void verificarEstadoPokemon(Entrenador entrenador) {
         Pokemon p = entrenador.getPokemonActivo();
         if (p != null && p.estaDesmayado()) {
             notificarPokemonDebilitado(p);

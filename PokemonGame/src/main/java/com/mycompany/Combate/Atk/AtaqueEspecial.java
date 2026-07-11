@@ -8,6 +8,8 @@ import java.util.Random;
 public class AtaqueEspecial extends Ataque {
     //Atributos
     private final Random random = new Random();
+    private int turnosCarga;   // cuántos turnos lleva cargando
+    private final int turnosNecesarios = 3; // constante: 3 turnos
     private boolean cargado;
     private EstadoPokemon efectoEstado; //Guarda el estado que puede producir el ataque
     private int probabilidadEstado;
@@ -17,11 +19,23 @@ public class AtaqueEspecial extends Ataque {
         super(builder);
         this.efectoEstado = builder.efectoEstado;
         this.probabilidadEstado = builder.probabilidadEstado;
+        this.turnosCarga = 0;
+        this.cargado = false;
     }
     
     
     @Override
     public void atacar(Pokemon atacante, Pokemon defensor) {
+        
+        if (!cargado) {
+            turnosCarga++;
+            System.out.println(atacante.getNombre() + " está cargando " + nombre + " (" + turnosCarga + "/" + turnosNecesarios + ")");
+            if (turnosCarga >= turnosNecesarios) {
+                cargado = true;
+                System.out.println(nombre + " está listo para usarse!");
+            }
+            return; // no ejecuta daño todavía
+        }
         
         TablaTipos tabla = TablaTipos.getInstancia(); //obtiene la tabla tipos
         

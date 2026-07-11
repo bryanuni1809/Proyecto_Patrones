@@ -4,7 +4,6 @@ package com.mycompany.pokemongame;
 import com.mycompany.Model.pokedex.Pokedex;
 import com.mycompany.Model.pokemon.Pokemon;
 import com.mycompany.Model.pokemon.TipoPokemon;
-import com.mycompany.Patrones.factory.PokemonFactory;
 
 /**
  *
@@ -14,17 +13,6 @@ public class Main {
 
     public static void main(String[] args) {
         
-        Pokemon pikachu = PokemonFactory.crearPokemon(
-                1,
-                25,
-                "Pikachu",
-                TipoPokemon.ELECTRICO,
-                5,
-                35,
-                55,
-                40,
-                90
-        );
 
         Pokedex pokedex = Pokedex.getInstancia();
 

@@ -1,8 +1,9 @@
 package com.mycompany.Model.entrenador;
 
 import com.mycompany.Model.pokemon.Pokemon;
-import com.mycompany.Patrones.composite.ItemMochila;
-import com.mycompany.Patrones.composite.MochilaGrupo;
+import com.mycompany.Patrones.composite.*;
+import com.mycompany.Combate.Atk.Ataque;
+import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,20 +42,24 @@ public class Entrenador {
     }
 
     // ── Getters y Setters ─────────────────────────────────────────────────
-    public String getNombre() {
-        return nombre;
-    }
+    public String getNombre() {return nombre;}
+    public void setNombre(String nombre) {this.nombre = nombre;}
+    public MochilaGrupo getMochila() {return mochila;}
+    public Pokemon[] getEquipo() {return equipo;}
+    
+    public Ataque elegirAtaque(Pokemon activo) {
+        // Mostrar lista de ataques disponibles
+        System.out.println("Elige un ataque para " + activo.getNombre() + ":");
+        for (int i = 0; i < activo.getAtaques().size(); i++) {
+            System.out.println((i + 1) + ". " + activo.getAtaques().get(i).getNombre());
+        }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+        // Leer opción del jugador (ejemplo con Scanner)
+        Scanner sc = new Scanner(System.in);
+        int opcion = sc.nextInt() - 1;
 
-    public MochilaGrupo getMochila() {
-        return mochila;
-    }
-
-    public Pokemon[] getEquipo() {
-        return equipo;
+        // Devolver el ataque elegido
+        return activo.getAtaques().get(opcion);
     }
 
     // ── Gestión del equipo ────────────────────────────────────────────────
