@@ -6,7 +6,7 @@ import com.mycompany.Patrones.prototype.Prototype;
 
 public abstract class Ataque implements Prototype<Ataque> { // Se utiliza el patron prototype para clonar el ataque
     //Atributos
-    protected String nombre;
+    public String nombre;
     protected int potencia;
     protected TipoPokemon tipo;
     // El constructor ahora es protegido y recibe el Builder genérico
