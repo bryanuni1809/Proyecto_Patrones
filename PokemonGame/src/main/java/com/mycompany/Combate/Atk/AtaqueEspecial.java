@@ -8,6 +8,7 @@ import java.util.Random;
 public class AtaqueEspecial extends Ataque {
     //Atributos
     private final Random random = new Random();
+    private boolean cargado;
     private EstadoPokemon efectoEstado; //Guarda el estado que puede producir el ataque
     private int probabilidadEstado;
 
@@ -17,6 +18,7 @@ public class AtaqueEspecial extends Ataque {
         this.efectoEstado = builder.efectoEstado;
         this.probabilidadEstado = builder.probabilidadEstado;
     }
+    
     
     @Override
     public void atacar(Pokemon atacante, Pokemon defensor) {

@@ -4,7 +4,7 @@ import com.mycompany.Model.pokemon.Pokemon;
 import com.mycompany.Model.pokemon.TipoPokemon;
 import com.mycompany.Patrones.prototype.Prototype;
 
-public abstract class Ataque implements Prototype<Ataque> { // Se utiliza el patron prototype para clonar el ataque
+public abstract class Ataque implements Prototype<Ataque>{ // Se utiliza el patron prototype para clonar el ataque
     //Atributos
     protected String nombre;
     protected int potencia;

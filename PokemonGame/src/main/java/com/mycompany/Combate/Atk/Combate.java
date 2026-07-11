@@ -11,16 +11,12 @@ public class Combate {
     private Entrenador entrenador1;
     private Entrenador entrenador2;
     private List<CombateObservador> observadores;
-    private int turnosPokemon1;
-    private int turnosPokemon2;
     private int turnoGeneral;
 
     public Combate(Entrenador entrenador1, Entrenador entrenador2, List<CombateObservador> observadoresIniciales) {
         this.entrenador1 = entrenador1;
         this.entrenador2 = entrenador2;
         this.observadores = observadoresIniciales;
-        this.turnosPokemon1 = 0;
-        this.turnosPokemon2 = 0;
         this.turnoGeneral = 1;
     }
 
@@ -84,9 +80,6 @@ public class Combate {
             verificarEstadoPokemon(entrenador1); //Verificar desmayos acumulados tras los efectos del final del turno
             verificarEstadoPokemon(entrenador2);
 
-            chequearLimiteDeTurnos(entrenador1); // Control de rotación obligatoria
-            chequearLimiteDeTurnos(entrenador2);
-
             turnoGeneral++; //Aumenta turno general 
         }
         if (!entrenador1.equipoDerrotado()) {
@@ -99,11 +92,6 @@ public class Combate {
     private void ejecutarAccion(Entrenador atacanteEnt, Pokemon atacante, Entrenador defensorEnt, Pokemon defensor) {
         notificarCambioTurno(atacante);
 
-        if (atacanteEnt == entrenador1) {
-            turnosPokemon1++;
-        } else {
-            turnosPokemon2++;
-        }
         if (atacante.iniciarTurno()) {
             if (!atacante.getAtaques().isEmpty()) {
                 Ataque ataque = atacante.getAtaques().get(0); // Por ahora usa el primer ataque disponible del listado
@@ -122,7 +110,6 @@ public class Combate {
         Pokemon p = entrenador.getPokemonActivo();
         if (p != null && p.estaDesmayado()) {
             notificarPokemonDebilitado(p);
-            resetearTurnos(entrenador); //reinicia los turnos
             
             if (!entrenador.equipoDerrotado()) {
                 Pokemon nuevo = entrenador.sacarSiguientePokemon();
@@ -130,22 +117,7 @@ public class Combate {
             }
         }
     }
-    
-
-    private void chequearLimiteDeTurnos(Entrenador entrenador) {
-        int turnosActivos = (entrenador == entrenador1) ? turnosPokemon1 : turnosPokemon2;
-        Pokemon actual = entrenador.getPokemonActivo();
-
-        if (actual != null && !actual.estaDesmayado() && turnosActivos >= 3 && tienePokemonDeReserva(entrenador)) { 
-            Pokemon viejo = actual;
-            resetearTurnos(entrenador);
-
-            Pokemon nuevo = entrenador.sacarSiguientePokemon();
-            notificarCambio(viejo, nuevo, "cumplio el limite de 3 turnos");
-
-        }
-    }
-
+        
     private boolean tienePokemonDeReserva(Entrenador e) {
         int vivos = 0;
         for (Pokemon p : e.getEquipo()) {
@@ -154,14 +126,6 @@ public class Combate {
             }
         }
         return vivos > 1;
-    }
-
-    private void resetearTurnos(Entrenador e) {
-        if (e == entrenador1) {
-            turnosPokemon1 = 0;
-        } else {
-            turnosPokemon2 = 0;
-        }
     }
 
 }
