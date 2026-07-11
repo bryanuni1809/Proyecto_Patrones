@@ -5,23 +5,24 @@ import com.mycompany.Model.pokemon.Pokemon;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Combate implements CombateCallback{
+public class Combate implements CombateCallback {
 
-    //Atributos
     private Entrenador entrenador1;
     private Entrenador entrenador2;
+    private CombateMemento mementoInicial;
     private List<CombateObservador> observadores;
     private int turnoGeneral;
 
     public Combate(Entrenador entrenador1, Entrenador entrenador2, List<CombateObservador> observadoresIniciales) {
         this.entrenador1 = entrenador1;
         this.entrenador2 = entrenador2;
-        this.observadores = observadoresIniciales;
+        // Aseguramos lista no nula para evitar NPE al registrar observadores
+        this.observadores = (observadoresIniciales != null) ? observadoresIniciales : new ArrayList<>();
         this.turnoGeneral = 1;
     }
 
-    public void registrarObservador(CombateObservador o) { //permite agregar nuevos observadores
-        observadores.add(o);
+    public void registrarObservador(CombateObservador o) {
+        if (o != null) observadores.add(o);
     }
 
     private void notificarCambioTurno(Pokemon p) {
@@ -29,7 +30,7 @@ public class Combate implements CombateCallback{
             o.onCambioTurno(turnoGeneral, p);
         }
     }
-    
+
     @Override
     public void notificarAtaque(Pokemon atacante, Pokemon defensor, String ataque, int damage) {
         for (CombateObservador o : observadores) {
@@ -57,13 +58,40 @@ public class Combate implements CombateCallback{
         }
     }
 
+    // Guardar estado inicial (llamar antes de iniciarBatalla o al inicio de la misma)
+    public void guardarEstadoInicial() {
+        List<Entrenador> copia = new ArrayList<>();
+        copia.add(entrenador1.clonar());
+        copia.add(entrenador2.clonar());
+        mementoInicial = new CombateMemento(turnoGeneral, copia);
+    }
+
+    // Restaurar desde el memento inicial
+    public void restaurarEstadoInicial() {
+        if (mementoInicial == null) return;
+        this.turnoGeneral = mementoInicial.getTurnoGeneral();
+        List<Entrenador> copia = mementoInicial.getEntrenadoresClonados();
+        this.entrenador1 = copia.get(0);
+        this.entrenador2 = copia.get(1);
+    }
+
+    // Reiniciar y volver a iniciar la batalla desde el estado inicial
+    public void reiniciarDesdeInicio() {
+        restaurarEstadoInicial();
+        iniciarBatalla();
+    }
+
     public void iniciarBatalla() {
+        if (mementoInicial == null) {
+            guardarEstadoInicial();
+        }
+
         System.out.println("¡Inicia el encuentro " + entrenador1.getNombre() + " vs " + entrenador2.getNombre() + "!");
-        while (!entrenador1.equipoDerrotado() && !entrenador2.equipoDerrotado()) { //Mientras ninguno haya perdido 
-            Pokemon p1 = entrenador1.getPokemonActivo(); //Obtiene los pokemons activos 
+        while (!entrenador1.equipoDerrotado() && !entrenador2.equipoDerrotado()) {
+            Pokemon p1 = entrenador1.getPokemonActivo();
             Pokemon p2 = entrenador2.getPokemonActivo();
 
-            if (p1.getVelocidad() >= p2.getVelocidad()) { // Decide quien ataca primero
+            if (p1.getVelocidad() >= p2.getVelocidad()) {
                 ejecutarAccion(entrenador1, p1, entrenador2, p2);
                 if (!p2.estaDesmayado() && !p1.estaDesmayado()) {
                     ejecutarAccion(entrenador2, p2, entrenador1, p1);
@@ -74,17 +102,16 @@ public class Combate implements CombateCallback{
                     ejecutarAccion(entrenador1, p1, entrenador2, p2);
                 }
             }
-            if (!p1.estaDesmayado()) { // Efectos de final de turno (ej. Daño por quemadura)
-                p1.finalTurno();
-            }
-            if (!p2.estaDesmayado()) {
-                p2.finalTurno();
-            }
-            verificarEstadoPokemon(entrenador1); //Verificar desmayos acumulados tras los efectos del final del turno
+
+            if (!p1.estaDesmayado()) p1.finalTurno();
+            if (!p2.estaDesmayado()) p2.finalTurno();
+
+            verificarEstadoPokemon(entrenador1);
             verificarEstadoPokemon(entrenador2);
 
-            turnoGeneral++; //Aumenta turno general 
+            turnoGeneral++;
         }
+
         if (!entrenador1.equipoDerrotado()) {
             notificarFin(entrenador1.getNombre());
         } else {
@@ -99,12 +126,8 @@ public class Combate implements CombateCallback{
             if (!atacante.getAtaques().isEmpty()) {
                 Ataque ataqueElegido = atacanteEnt.elegirAtaque(atacante);
 
-                // Crear el comando y delegar la ejecución
                 AtaqueComand cmd = new AtaqueComand(ataqueElegido, atacante, defensor, defensorEnt, this);
                 cmd.ejecutar();
-                
-                // ya no necesitas calcular daño ni llamar verificarEstadoPokemon aquí:
-                // el comando lo hizo solo
             }
         }
     }
@@ -114,22 +137,19 @@ public class Combate implements CombateCallback{
         Pokemon p = entrenador.getPokemonActivo();
         if (p != null && p.estaDesmayado()) {
             notificarPokemonDebilitado(p);
-            
+
             if (!entrenador.equipoDerrotado()) {
                 Pokemon nuevo = entrenador.sacarSiguientePokemon();
                 notificarCambio(p, nuevo, "se desmayo");
             }
         }
     }
-        
+
     private boolean tienePokemonDeReserva(Entrenador e) {
         int vivos = 0;
         for (Pokemon p : e.getEquipo()) {
-            if (p != null && !p.estaDesmayado()) {
-                vivos++;
-            }
+            if (p != null && !p.estaDesmayado()) vivos++;
         }
         return vivos > 1;
     }
-
 }

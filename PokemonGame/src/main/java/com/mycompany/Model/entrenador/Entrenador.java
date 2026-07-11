@@ -3,6 +3,7 @@ package com.mycompany.Model.entrenador;
 import com.mycompany.Model.pokemon.Pokemon;
 import com.mycompany.Patrones.composite.*;
 import com.mycompany.Combate.Atk.Ataque;
+import com.mycompany.Patrones.prototype.Prototype;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +24,7 @@ import java.util.List;
  * agrupado; solo llama a usar() y getCantidad(). SOLID → LSP: cualquier
  * ItemMochila (hoja o compuesto) es intercambiable.
  */
-public class Entrenador {
+public class Entrenador implements Prototype<Entrenador>{
 
     private String nombre;
     private Pokemon[] equipo; 
@@ -110,6 +111,24 @@ public class Entrenador {
                      .allMatch(Pokemon::estaDesmayado);
     }   
 
+    @Override
+    public Entrenador clonar() {
+        try {
+            Entrenador copia = (Entrenador) super.clone();
+            // Clonar arreglo de Pokemon
+            Pokemon[] equipoCopia = new Pokemon[this.equipo.length];
+            for (int i = 0; i < this.equipo.length; i++) {
+                equipoCopia[i] = (this.equipo[i] != null) ? this.equipo[i].clonar(): null;
+            }
+            copia.equipo = equipoCopia;
+            // Si mochila u otros campos mutables existen, clónalos también o crea nuevas instancias
+            // copia.mochila = this.mochila.clone(); // si aplica
+            return copia;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
     // ── Gestión de la mochila (Composite) ────────────────────────────────
     /**
      * Agrega un ítem (individual o grupo) directamente a la mochila raíz.

@@ -4,7 +4,6 @@ package com.mycompany.pokemongame;
 import com.mycompany.Model.pokedex.Pokedex;
 import com.mycompany.Model.pokemon.Pokemon;
 import com.mycompany.Model.pokemon.TipoPokemon;
-
 /**
  *
  * @author admin
@@ -39,5 +38,12 @@ public class Main {
             System.out.println("No se encontro ningun Pokemon con ese ID.");
             
         }
+        
+        
+        Combate combate = new Combate(jugador, rival, new ArrayList<>());
+        ConsolaObservador consolaObs = new ConsolaObservador(combate, jugador.getNombre());
+        combate.registrarObservador(consolaObs);
+        combate.iniciarBatalla();
+
     }
 }
