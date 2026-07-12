@@ -14,26 +14,26 @@ public class PanelPokedex extends JPanel {
     // ═══════════════════════════════════════════════════════════════
     // PALETA
     // ═══════════════════════════════════════════════════════════════
-    private static final Color FONDO_APP        = new Color(250, 244, 234);
-    private static final Color ROJO_ACENTO       = new Color(200, 44, 44);
-    private static final Color ROJO_ACENTO_OSC   = new Color(150, 28, 28);
+    private static final Color FONDO_APP = new Color(250, 244, 234);
+    private static final Color ROJO_ACENTO = new Color(200, 44, 44);
+    private static final Color ROJO_ACENTO_OSC = new Color(150, 28, 28);
 
-    private static final Color BISEL_CLARO       = new Color(182, 200, 166);
-    private static final Color BISEL_OSCURO      = new Color(122, 142, 108);
-    private static final Color BISEL_BORDE       = new Color(78, 96, 66);
+    private static final Color BISEL_CLARO = new Color(182, 200, 166);
+    private static final Color BISEL_OSCURO = new Color(122, 142, 108);
+    private static final Color BISEL_BORDE = new Color(78, 96, 66);
     private static final Color BISEL_BORDE_HOVER = new Color(255, 196, 0);
 
-    private static final Color PANTALLA_FONDO    = new Color(240, 246, 224);
-    private static final Color PANTALLA_BORDE    = new Color(150, 168, 122);
+    private static final Color PANTALLA_FONDO = new Color(240, 246, 224);
+    private static final Color PANTALLA_BORDE = new Color(150, 168, 122);
 
-    private static final Color HEADER_CLARO      = new Color(146, 198, 120);
-    private static final Color HEADER_OSCURO     = new Color(92, 150, 76);
+    private static final Color HEADER_CLARO = new Color(146, 198, 120);
+    private static final Color HEADER_OSCURO = new Color(92, 150, 76);
 
-    private static final Color SPRITE_FONDO      = new Color(222, 234, 202);
-    private static final Color SPRITE_BORDE       = new Color(140, 160, 116);
+    private static final Color SPRITE_FONDO = new Color(222, 234, 202);
+    private static final Color SPRITE_BORDE = new Color(140, 160, 116);
 
-    private static final Color TEXTO_OSCURO      = new Color(44, 52, 38);
-    private static final Color TEXTO_SUAVE       = new Color(96, 108, 84);
+    private static final Color TEXTO_OSCURO = new Color(44, 52, 38);
+    private static final Color TEXTO_SUAVE = new Color(96, 108, 84);
 
     private final PokemonGameFacade facade;
     private final JPanel grilla;      // GridLayout real -> alineación perfecta
@@ -60,6 +60,7 @@ public class PanelPokedex extends JPanel {
         scroll.getViewport().setBackground(FONDO_APP);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         add(scroll, BorderLayout.CENTER);
 
         cargarTodos();
@@ -68,7 +69,6 @@ public class PanelPokedex extends JPanel {
     // ═══════════════════════════════════════════════════════════════
     // ENCABEZADO
     // ═══════════════════════════════════════════════════════════════
-
     private JPanel construirEncabezado() {
         JPanel contenedor = new JPanel(new BorderLayout());
         contenedor.setBackground(FONDO_APP);
@@ -86,7 +86,7 @@ public class PanelPokedex extends JPanel {
         encabezado.setBackground(FONDO_APP);
         encabezado.setBorder(BorderFactory.createEmptyBorder(12, 14, 12, 14));
 
-        JLabel titulo = new JLabel("Pokedex Nacional");
+        JLabel titulo = new JLabel("Pokedex");
         titulo.setFont(CargadorImagenes.getFuentePokemon(26f));
         titulo.setForeground(ROJO_ACENTO_OSC);
         titulo.setIcon(CargadorImagenes.cargarIconoPokebola(26));
@@ -97,12 +97,12 @@ public class PanelPokedex extends JPanel {
         buscador.putClientProperty("JTextField.placeholderText", "Buscar Pokemon...");
         buscador.setPreferredSize(new Dimension(260, 34));
         buscador.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(150, 168, 122), 2, true),
-            BorderFactory.createEmptyBorder(4, 10, 4, 10)
+                BorderFactory.createLineBorder(new Color(150, 168, 122), 2, true),
+                BorderFactory.createEmptyBorder(4, 10, 4, 10)
         ));
 
-        JButton btnBuscar = botonEstilizado("Buscar", ROJO_ACENTO, Color.WHITE);
-        JButton btnLimpiar = botonEstilizado("Ver todos", new Color(96, 140, 200), Color.WHITE);
+        JButton btnBuscar = botonEstilizado("Buscar", new Color(180, 30, 30), Color.WHITE);
+        JButton btnLimpiar = botonEstilizado("Ver todos", new Color(80, 140, 80), Color.WHITE);
 
         JPanel panelBusqueda = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         panelBusqueda.setOpaque(false);
@@ -149,8 +149,8 @@ public class PanelPokedex extends JPanel {
         boton.setBackground(fondo);
         boton.setFocusPainted(false);
         boton.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(fondo.darker(), 1, true),
-            BorderFactory.createEmptyBorder(7, 16, 7, 16)
+                BorderFactory.createLineBorder(fondo.darker(), 1, true),
+                BorderFactory.createEmptyBorder(7, 16, 7, 16)
         ));
         boton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         boton.setOpaque(true);
@@ -171,7 +171,6 @@ public class PanelPokedex extends JPanel {
     // ═══════════════════════════════════════════════════════════════
     // CARGA Y BÚSQUEDA
     // ═══════════════════════════════════════════════════════════════
-
     private void buscar() {
         String texto = buscador.getText().trim();
         if (texto.isEmpty()) {
@@ -220,10 +219,9 @@ public class PanelPokedex extends JPanel {
     // ═══════════════════════════════════════════════════════════════
     // CARD ESTILO PANTALLA GBA
     // ═══════════════════════════════════════════════════════════════
-
     private JPanel crearTarjetaEstiloGen1(Pokemon p) {
         TarjetaGBA tarjeta = new TarjetaGBA();
-        tarjeta.setPreferredSize(new Dimension(430, 250));
+        tarjeta.setPreferredSize(new Dimension(430, 210));
         tarjeta.setLayout(new BorderLayout());
 
         // ---- Header (barra degradada dentro de la pantalla) ----
@@ -251,13 +249,13 @@ public class PanelPokedex extends JPanel {
         JPanel panelSprite = new JPanel(new GridBagLayout());
         panelSprite.setBackground(SPRITE_FONDO);
         panelSprite.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(SPRITE_BORDE, 2, true),
-            BorderFactory.createEmptyBorder(4, 4, 4, 4)
+                BorderFactory.createLineBorder(SPRITE_BORDE, 2, true),
+                BorderFactory.createEmptyBorder(4, 4, 4, 4)
         ));
         panelSprite.setPreferredSize(new Dimension(140, 170));
 
         JLabel spriteLabel = new JLabel(
-            CargadorImagenes.cargarSpritePokemon(p.getNumeroPokedex(), 96, 96)
+                CargadorImagenes.cargarSpritePokemon(p.getNumeroPokedex(), 96, 96)
         );
         panelSprite.add(spriteLabel);
 
@@ -268,22 +266,23 @@ public class PanelPokedex extends JPanel {
 
         JPanel filaTipo = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         filaTipo.setOpaque(false);
-        JLabel lblTipoTag = new JLabel("TYPE ");
+        JLabel lblTipoTag = new JLabel("TYPE    ");
         lblTipoTag.setFont(CargadorImagenes.getFuentePokemon(10f));
         lblTipoTag.setForeground(TEXTO_SUAVE);
         filaTipo.add(lblTipoTag);
-        filaTipo.add(new EtiquetaTipo(p.getTipo().toString()));
+        JLabel badgeTipo = new JLabel(CargadorImagenes.cargarBadgeTipo(p.getTipo().toString(), 70, 22));
+        filaTipo.add(badgeTipo);
         filaTipo.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JPanel statsBox = new JPanel();
         statsBox.setOpaque(false);
         statsBox.setLayout(new BoxLayout(statsBox, BoxLayout.Y_AXIS));
         statsBox.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(PANTALLA_BORDE, 1),
-                "STATS", 0, 0, CargadorImagenes.getFuentePokemon(9f), TEXTO_SUAVE
-            ),
-            BorderFactory.createEmptyBorder(4, 6, 6, 6)
+                BorderFactory.createTitledBorder(
+                        BorderFactory.createLineBorder(PANTALLA_BORDE, 1),
+                        "STATS", 0, 0, CargadorImagenes.getFuentePokemon(9f), TEXTO_SUAVE
+                ),
+                BorderFactory.createEmptyBorder(4, 6, 6, 6)
         ));
         statsBox.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -296,7 +295,7 @@ public class PanelPokedex extends JPanel {
         statsBox.add(new BarraStat("SPD", p.getVelocidad(), 130, new Color(220, 90, 150)));
 
         columnaInfo.add(filaTipo);
-        columnaInfo.add(Box.createVerticalStrut(10));
+        columnaInfo.add(Box.createVerticalStrut(0));
         columnaInfo.add(statsBox);
 
         contenido.add(panelSprite, BorderLayout.WEST);
@@ -314,11 +313,6 @@ public class PanelPokedex extends JPanel {
 
         tarjeta.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                mostrarDetalleCompleto(p);
-            }
-
-            @Override
             public void mouseEntered(MouseEvent e) {
                 tarjeta.setHover(true);
             }
@@ -332,54 +326,14 @@ public class PanelPokedex extends JPanel {
         return tarjeta;
     }
 
-    private void mostrarDetalleCompleto(Pokemon p) {
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
-        panel.setBackground(PANTALLA_FONDO);
-        panel.setBorder(BorderFactory.createEmptyBorder(12, 16, 12, 16));
-
-        JLabel titulo = new JLabel(p.getNombre().toUpperCase() + "  #" + String.format("%03d", p.getNumeroPokedex()));
-        titulo.setFont(CargadorImagenes.getFuentePokemon(16f));
-        titulo.setForeground(TEXTO_OSCURO);
-
-        JPanel cuerpo = new JPanel();
-        cuerpo.setOpaque(false);
-        cuerpo.setLayout(new BoxLayout(cuerpo, BoxLayout.Y_AXIS));
-        cuerpo.add(filaDetalle("Tipo:", p.getTipo().toString()));
-        cuerpo.add(Box.createVerticalStrut(6));
-        cuerpo.add(new BarraStat("HP", p.getHp(), 130, new Color(96, 190, 96)));
-        cuerpo.add(Box.createVerticalStrut(4));
-        cuerpo.add(new BarraStat("ATK", p.getAtaque(), 130, new Color(230, 130, 60)));
-        cuerpo.add(Box.createVerticalStrut(4));
-        cuerpo.add(new BarraStat("DEF", p.getDefensa(), 130, new Color(90, 150, 220)));
-        cuerpo.add(Box.createVerticalStrut(4));
-        cuerpo.add(new BarraStat("SPD", p.getVelocidad(), 130, new Color(220, 90, 150)));
-
-        panel.add(titulo, BorderLayout.NORTH);
-        panel.add(cuerpo, BorderLayout.CENTER);
-
-        JOptionPane.showMessageDialog(this, panel, "Detalle Pokemon", JOptionPane.PLAIN_MESSAGE);
-    }
-
-    private JPanel filaDetalle(String etiqueta, String valor) {
-        JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
-        fila.setOpaque(false);
-        JLabel lbl = new JLabel(etiqueta);
-        lbl.setFont(CargadorImagenes.getFuentePokemon(11f));
-        lbl.setForeground(TEXTO_SUAVE);
-        JLabel val = new JLabel(valor);
-        val.setFont(CargadorImagenes.getFuentePokemon(12f));
-        val.setForeground(TEXTO_OSCURO);
-        fila.add(lbl);
-        fila.add(val);
-        return fila;
-    }
-
     // ═══════════════════════════════════════════════════════════════
     // COMPONENTES AUXILIARES DE DIBUJO
     // ═══════════════════════════════════════════════════════════════
-
-    /** Panel exterior tipo "consola" con bisel, sombra y pantalla redondeada */
+    /**
+     * Panel exterior tipo "consola" con bisel, sombra y pantalla redondeada
+     */
     private static class TarjetaGBA extends JPanel {
+
         private boolean hover = false;
 
         TarjetaGBA() {
@@ -430,8 +384,11 @@ public class PanelPokedex extends JPanel {
         }
     }
 
-    /** Barra con degradado vertical, usada como header dentro de la pantalla */
+    /**
+     * Barra con degradado vertical, usada como header dentro de la pantalla
+     */
     private static class BarraDegradado extends JPanel {
+
         private final Color c1;
         private final Color c2;
 
@@ -455,8 +412,11 @@ public class PanelPokedex extends JPanel {
         }
     }
 
-    /** Badge de tipo redondeado y coloreado según el tipo */
+    /**
+     * Badge de tipo redondeado y coloreado según el tipo
+     */
     private static class EtiquetaTipo extends JComponent {
+
         private final String tipo;
 
         EtiquetaTipo(String tipo) {
@@ -497,8 +457,11 @@ public class PanelPokedex extends JPanel {
         }
     }
 
-    /** Barra de estadística tipo "medidor" (HP/ATK/DEF/SPD) con relleno de color */
+    /**
+     * Barra de estadística tipo "medidor" (HP/ATK/DEF/SPD) con relleno de color
+     */
     private static class BarraStat extends JComponent {
+
         private static final int MAX_REFERENCIA_DEFECTO = 150;
         private final String etiqueta;
         private final int valor;

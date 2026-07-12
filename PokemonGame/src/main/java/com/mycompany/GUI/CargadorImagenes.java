@@ -59,6 +59,38 @@ public class CargadorImagenes {
         cacheImagenes.put(clave, icon);
         return icon;
     }
+    
+     public static ImageIcon cargarIconoBatalla(int tamaño) {
+        String clave = "batalla-" + tamaño;
+        if (cacheImagenes.containsKey(clave)) {
+            return cacheImagenes.get(clave);
+        }
+        URL recurso = CargadorImagenes.class.getResource("/img/pokedex/battle-icon.png");
+        ImageIcon icon;
+        if (recurso != null) {
+            icon = cargarImagen("/img/pokedex/battle-icon.png", tamaño, tamaño, true);
+        } else {
+            icon = new ImageIcon(dibujarPokebola(tamaño));
+        }
+        cacheImagenes.put(clave, icon);
+        return icon;
+    }
+    
+        public static ImageIcon cargarIconoPokedex(int tamaño) {
+        String clave = "pokedex-" + tamaño;
+        if (cacheImagenes.containsKey(clave)) {
+            return cacheImagenes.get(clave);
+        }
+        URL recurso = CargadorImagenes.class.getResource("/img/pokedex/game-icon.png");
+        ImageIcon icon;
+        if (recurso != null) {
+            icon = cargarImagen("/img/pokedex/game-icon.png", tamaño, tamaño, true);
+        } else {
+            icon = new ImageIcon(dibujarPokebola(tamaño));
+        }
+        cacheImagenes.put(clave, icon);
+        return icon;
+    }
 
     private static BufferedImage dibujarPokebola(int tamaño) {
         BufferedImage img = new BufferedImage(tamaño, tamaño, BufferedImage.TYPE_INT_ARGB);

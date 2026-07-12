@@ -23,7 +23,8 @@ public class VentanaPrincipal extends JFrame {
         JTabbedPane pestanas = new JTabbedPane();
         pestanas.setFont(CargadorImagenes.getFuentePokemon(13f));
         pestanas.setBackground(new Color(250, 244, 234));
-        pestanas.addTab("Pokedex", CargadorImagenes.cargarIconoPokebola(16), new PanelPokedex(facade));
+        pestanas.addTab("Pokedex", CargadorImagenes.cargarIconoPokedex(16), new PanelPokedex(facade));
+        pestanas.addTab("Batalla", CargadorImagenes.cargarIconoBatalla(16), new PanelPokedex(facade));
         add(pestanas);
     }
 
@@ -35,11 +36,6 @@ public class VentanaPrincipal extends JFrame {
         // ═══════════════════════════════════════════════════════════════
         CargadorImagenes.configurarRenderizadoFuente();
 
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ignored) {
-            // Si falla, se usa el look and feel por defecto de Swing sin problema
-        }
 
         SwingUtilities.invokeLater(() -> new VentanaPrincipal().setVisible(true));
     }
