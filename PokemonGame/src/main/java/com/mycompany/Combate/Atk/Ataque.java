@@ -4,16 +4,16 @@ import com.mycompany.Model.pokemon.Pokemon;
 import com.mycompany.Model.pokemon.TipoPokemon;
 import com.mycompany.Patrones.prototype.Prototype;
 
-public abstract class Ataque implements Prototype<Ataque> { // Se utiliza el patron prototype para clonar el ataque
+public abstract class Ataque implements Prototype<Ataque>{ // Se utiliza el patron prototype para clonar el ataque
     //Atributos
     protected String nombre;
     protected int potencia;
     protected TipoPokemon tipo;
     // El constructor ahora es protegido y recibe el Builder genérico
     protected Ataque(Builder<?> builder) {
-        this.nombre = builder.nombre;
         this.potencia = builder.potencia;
         this.tipo = builder.tipo;
+        this.nombre = "Ataque especial tipo: " + tipo;
     }
 
     //Metodo abstracto
@@ -41,6 +41,10 @@ public abstract class Ataque implements Prototype<Ataque> { // Se utiliza el pat
 
         public abstract Ataque build();
         protected abstract T self();
+    }
+
+    public String getNombre() {
+        return nombre;
     }
 
 }
