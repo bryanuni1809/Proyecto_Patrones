@@ -1,8 +1,8 @@
 package com.mycompany.GUI;
 
 import com.mycompany.Facade.PokemonGameFacade;
-
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Punto de entrada de la interfaz gráfica. Fase 1: solo Pokédex.
@@ -13,18 +13,34 @@ public class VentanaPrincipal extends JFrame {
 
     public VentanaPrincipal() {
         PokemonGameFacade facade = new PokemonGameFacade();
-
-        setTitle("Pokémon Game");
+        setTitle("Pokemon Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(950, 700);
+        setSize(980, 720);
+        setMinimumSize(new Dimension(760, 560));
         setLocationRelativeTo(null);
+        setIconImage(CargadorImagenes.cargarIconoPokebola(32).getImage());
 
         JTabbedPane pestanas = new JTabbedPane();
-        pestanas.addTab("Pokédex", new PanelPokedex(facade));
+        pestanas.setFont(CargadorImagenes.getFuentePokemon(13f));
+        pestanas.setBackground(new Color(250, 244, 234));
+        pestanas.addTab("Pokedex", CargadorImagenes.cargarIconoPokebola(16), new PanelPokedex(facade));
         add(pestanas);
     }
 
     public static void main(String[] args) {
+        // ═══════════════════════════════════════════════════════════════
+        // IMPORTANTE: Configurar renderizado de fuente ANTES de crear
+        // cualquier componente Swing para que la fuente pixelada se vea
+        // nítida y correcta
+        // ═══════════════════════════════════════════════════════════════
+        CargadorImagenes.configurarRenderizadoFuente();
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ignored) {
+            // Si falla, se usa el look and feel por defecto de Swing sin problema
+        }
+
         SwingUtilities.invokeLater(() -> new VentanaPrincipal().setVisible(true));
     }
 }
