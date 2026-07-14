@@ -6,7 +6,7 @@ import com.mycompany.Model.pokemon.Pokemon;
 import java.util.List;
 
 /**
- * FACHADA (Facade) del juego.
+ * FACADE
  *
  * La GUI nunca debe hablar directamente con Pokedex, Entrenador, Combate,
  * etc. Todo pasa por esta clase. Por ahora solo expone lo necesario para la

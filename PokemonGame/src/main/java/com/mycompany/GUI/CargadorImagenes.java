@@ -36,10 +36,6 @@ public class CargadorImagenes {
         return cargarImagen("/img/pokemon/front/" + numeroPokedex + ".png", ancho, alto, true);
     }
 
-    public static ImageIcon cargarSpriteEspalda(int numeroPokedex, int ancho, int alto) {
-        return cargarImagen("/img/pokemon/back/" + numeroPokedex + ".png", ancho, alto, true);
-    }
-
     /**
      * Icono de pokebola para decorar encabezados. Si no existe el archivo
      * "/img/pokedex/pokebola-icon.png" se dibuja una pokebola vectorial simple.
@@ -49,10 +45,10 @@ public class CargadorImagenes {
         if (cacheImagenes.containsKey(clave)) {
             return cacheImagenes.get(clave);
         }
-        URL recurso = CargadorImagenes.class.getResource("/img/pokedex/pokebola-icon.png");
+        URL recurso = CargadorImagenes.class.getResource("/pokedex/pokebola-icon.png");
         ImageIcon icon;
         if (recurso != null) {
-            icon = cargarImagen("/img/pokedex/pokebola-icon.png", tamaño, tamaño, true);
+            icon = cargarImagen("/pokedex/pokebola-icon.png", tamaño, tamaño, true);
         } else {
             icon = new ImageIcon(dibujarPokebola(tamaño));
         }
@@ -65,10 +61,10 @@ public class CargadorImagenes {
         if (cacheImagenes.containsKey(clave)) {
             return cacheImagenes.get(clave);
         }
-        URL recurso = CargadorImagenes.class.getResource("/img/pokedex/battle-icon.png");
+        URL recurso = CargadorImagenes.class.getResource("/pokedex/battle-icon.png");
         ImageIcon icon;
         if (recurso != null) {
-            icon = cargarImagen("/img/pokedex/battle-icon.png", tamaño, tamaño, true);
+            icon = cargarImagen("/pokedex/battle-icon.png", tamaño, tamaño, true);
         } else {
             icon = new ImageIcon(dibujarPokebola(tamaño));
         }
@@ -81,10 +77,10 @@ public class CargadorImagenes {
         if (cacheImagenes.containsKey(clave)) {
             return cacheImagenes.get(clave);
         }
-        URL recurso = CargadorImagenes.class.getResource("/img/pokedex/game-icon.png");
+        URL recurso = CargadorImagenes.class.getResource("/pokedex/game-icon.png");
         ImageIcon icon;
         if (recurso != null) {
-            icon = cargarImagen("/img/pokedex/game-icon.png", tamaño, tamaño, true);
+            icon = cargarImagen("/pokedex/game-icon.png", tamaño, tamaño, true);
         } else {
             icon = new ImageIcon(dibujarPokebola(tamaño));
         }
@@ -250,7 +246,7 @@ public class CargadorImagenes {
     }
 
     public static ImageIcon cargarBadgeTipo(String tipo, int ancho, int alto) {
-        String archivo = "/img/pokedex/" + tipo.toLowerCase() + "-icon.png";
+        String archivo = "/pokedex/" + tipo.toLowerCase() + "-icon.png";
         return cargarImagen(archivo, ancho, alto, true);
     }
 }
