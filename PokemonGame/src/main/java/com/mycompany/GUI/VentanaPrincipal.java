@@ -1,13 +1,13 @@
-package com.mycompany.GUI;
+package com.mycompany.gui;
 
 import com.mycompany.Facade.PokemonGameFacade;
 import javax.swing.*;
 import java.awt.*;
 
 /**
- * Punto de entrada de la interfaz gráfica. Fase 1: solo Pokédex.
- * Las próximas pestañas (Equipo, Mochila, Combate) se agregan aquí sin
- * tocar PanelPokedex ni la Facade existente.
+ * Punto de entrada de la interfaz gráfica. Fase 1: solo Pokédex. Las próximas
+ * pestañas (Equipo, Mochila, Combate) se agregan aquí sin tocar PanelPokedex ni
+ * la Facade existente.
  */
 public class VentanaPrincipal extends JFrame {
 
@@ -23,8 +23,9 @@ public class VentanaPrincipal extends JFrame {
         JTabbedPane pestanas = new JTabbedPane();
         pestanas.setFont(CargadorImagenes.getFuentePokemon(13f));
         pestanas.setBackground(new Color(250, 244, 234));
-        pestanas.addTab("Pokedex", CargadorImagenes.cargarIconoPokedex(16), new PanelPokedex(facade));
-        pestanas.addTab("Batalla", CargadorImagenes.cargarIconoBatalla(16), new PanelPokedex(facade));
+        pestanas.addTab("Pokedex", RecursosImagenes.cargarIconoPokedex(16), new PanelPokedex(facade));
+        pestanas.addTab("Batalla", RecursosImagenes.cargarIconoBatalla(16), new Sistema_Batalla());
+
         add(pestanas);
     }
 
@@ -34,8 +35,7 @@ public class VentanaPrincipal extends JFrame {
         // cualquier componente Swing para que la fuente pixelada se vea
         // nítida y correcta
         // ═══════════════════════════════════════════════════════════════
-        CargadorImagenes.configurarRenderizadoFuente();
-
+        RecursosImagenes.configurarRenderizadoFuente();
 
         SwingUtilities.invokeLater(() -> new VentanaPrincipal().setVisible(true));
     }

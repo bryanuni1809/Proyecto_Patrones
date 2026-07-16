@@ -24,7 +24,7 @@ import java.util.List;
  * agrupado; solo llama a usar() y getCantidad(). SOLID → LSP: cualquier
  * ItemMochila (hoja o compuesto) es intercambiable.
  */
-public class Entrenador implements Prototype<Entrenador>{
+public class Entrenador implements Prototype<Entrenador>, Cloneable {
 
     private String nombre;
     private Pokemon[] equipo; 
@@ -35,6 +35,15 @@ public class Entrenador implements Prototype<Entrenador>{
      * Raíz del árbol Composite: la mochila completa del entrenador.
      */
     private MochilaGrupo mochila;
+
+    /**
+     * Patrón Strategy: decide cómo se elige el ataque en cada turno.
+     * Por defecto se mantiene el comportamiento original por consola
+     * (Scanner), para no romper ningún uso existente. La GUI (u otro
+     * cliente) puede reemplazarla con setSelectorAtaque(...).
+     */
+    private SelectorAtaque selectorAtaque = new SelectorAtaqueConsola();
+
     //Constructor 
     public Entrenador(String nombre) {
         this.nombre = nombre;
@@ -47,20 +56,41 @@ public class Entrenador implements Prototype<Entrenador>{
     public void setNombre(String nombre) {this.nombre = nombre;}
     public MochilaGrupo getMochila() {return mochila;}
     public Pokemon[] getEquipo() {return equipo;}
-    
-    public Ataque elegirAtaque(Pokemon activo) {
-        // Mostrar lista de ataques disponibles
-        System.out.println("Elige un ataque para " + activo.getNombre() + ":");
-        for (int i = 0; i < activo.getAtaques().size(); i++) {
-            System.out.println((i + 1) + ". " + activo.getAtaques().get(i).getNombre());
+
+    /**
+     * Permite reemplazar la forma en que se elige el ataque (por ejemplo,
+     * desde botones de Swing en vez de la consola).
+     */
+    public void setSelectorAtaque(SelectorAtaque selectorAtaque) {
+        if (selectorAtaque != null) {
+            this.selectorAtaque = selectorAtaque;
         }
+    }
 
-        // Leer opción del jugador (ejemplo con Scanner)
-        Scanner sc = new Scanner(System.in);
-        int opcion = sc.nextInt() - 1;
+    public Ataque elegirAtaque(Pokemon activo) {
+        // La decisión de COMO elegir el ataque queda delegada a la estrategia activa.
+        return selectorAtaque.elegir(activo, activo.getAtaques());
+    }
 
-        // Devolver el ataque elegido
-        return activo.getAtaques().get(opcion);
+    /**
+     * Implementación original (comportamiento por defecto): pide el ataque
+     * por consola con Scanner. Se conserva intacta, solo que ahora vive
+     * detrás de la interfaz SelectorAtaque en vez de estar fija en
+     * elegirAtaque().
+     */
+    private static class SelectorAtaqueConsola implements SelectorAtaque {
+        @Override
+        public Ataque elegir(Pokemon activo, List<Ataque> ataques) {
+            System.out.println("Elige un ataque para " + activo.getNombre() + ":");
+            for (int i = 0; i < ataques.size(); i++) {
+                System.out.println((i + 1) + ". " + ataques.get(i).getNombre());
+            }
+
+            Scanner sc = new Scanner(System.in);
+            int opcion = sc.nextInt() - 1;
+
+            return ataques.get(opcion);
+        }
     }
 
     // ── Gestión del equipo ────────────────────────────────────────────────
@@ -79,12 +109,7 @@ public class Entrenador implements Prototype<Entrenador>{
      */
     public Pokemon getPokemonActivo() { 
         if (indiceActivo < cantidadPokemon) {
-            Pokemon actual = equipo[indiceActivo];
-            // CORRECCIÓN: Si el actual está debilitado, busca automáticamente el relevo
-            if (actual != null && actual.estaDesmayado()) {
-                return sacarSiguientePokemon();
-            }
-            return actual;
+            return equipo[indiceActivo];
         }
         return null;
     }

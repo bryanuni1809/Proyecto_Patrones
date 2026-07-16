@@ -1,4 +1,4 @@
-package com.mycompany.GUI;
+package com.mycompany.gui;
 
 import com.mycompany.Facade.PokemonGameFacade;
 import com.mycompany.Model.pokemon.Pokemon;
@@ -8,6 +8,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import com.mycompany.gui.RecursosImagenes;
+import com.mycompany.Model.pokemon.TipoPokemon; // <-- Agregado para EtiquetaTipo
+
 
 public class PanelPokedex extends JPanel {
 
@@ -87,13 +90,13 @@ public class PanelPokedex extends JPanel {
         encabezado.setBorder(BorderFactory.createEmptyBorder(12, 14, 12, 14));
 
         JLabel titulo = new JLabel("Pokedex");
-        titulo.setFont(CargadorImagenes.getFuentePokemon(26f));
+        titulo.setFont(RecursosImagenes.getFuentePokemon(26f));
         titulo.setForeground(ROJO_ACENTO_OSC);
-        titulo.setIcon(CargadorImagenes.cargarIconoPokebola(26));
+        titulo.setIcon(RecursosImagenes.cargarIconoPokebola(26));
         titulo.setIconTextGap(10);
 
         buscador = new JTextField();
-        buscador.setFont(CargadorImagenes.getFuentePokemon(14f));
+        buscador.setFont(RecursosImagenes.getFuentePokemon(14f));
         buscador.putClientProperty("JTextField.placeholderText", "Buscar Pokemon...");
         buscador.setPreferredSize(new Dimension(260, 34));
         buscador.setBorder(BorderFactory.createCompoundBorder(
@@ -144,7 +147,7 @@ public class PanelPokedex extends JPanel {
 
     private JButton botonEstilizado(String texto, Color fondo, Color textoColor) {
         JButton boton = new JButton(texto);
-        boton.setFont(CargadorImagenes.getFuentePokemon(12f));
+        boton.setFont(RecursosImagenes.getFuentePokemon(12f));
         boton.setForeground(textoColor);
         boton.setBackground(fondo);
         boton.setFocusPainted(false);
@@ -186,7 +189,7 @@ public class PanelPokedex extends JPanel {
             grilla.add(Box.createGlue());
         } else {
             JLabel lblNoEncontrado = new JLabel("No se encontro: " + texto, SwingConstants.CENTER);
-            lblNoEncontrado.setFont(CargadorImagenes.getFuentePokemon(16f));
+            lblNoEncontrado.setFont(RecursosImagenes.getFuentePokemon(16f));
             lblNoEncontrado.setForeground(TEXTO_SUAVE);
             grilla.add(lblNoEncontrado);
         }
@@ -203,7 +206,7 @@ public class PanelPokedex extends JPanel {
 
         if (lista.isEmpty()) {
             JLabel lblVacio = new JLabel("La Pokedex esta vacia (revisa la BD)", SwingConstants.CENTER);
-            lblVacio.setFont(CargadorImagenes.getFuentePokemon(14f));
+            lblVacio.setFont(RecursosImagenes.getFuentePokemon(14f));
             lblVacio.setForeground(TEXTO_SUAVE);
             grilla.add(lblVacio);
         } else {
@@ -230,11 +233,11 @@ public class PanelPokedex extends JPanel {
         header.setBorder(BorderFactory.createEmptyBorder(4, 10, 4, 10));
 
         JLabel lblNombre = new JLabel(p.getNombre().toUpperCase());
-        lblNombre.setFont(CargadorImagenes.getFuentePokemon(15f));
+        lblNombre.setFont(RecursosImagenes.getFuentePokemon(15f));
         lblNombre.setForeground(new Color(30, 40, 24));
 
         JLabel lblNumero = new JLabel("No." + String.format("%03d", p.getNumeroPokedex()));
-        lblNumero.setFont(CargadorImagenes.getFuentePokemon(13f));
+        lblNumero.setFont(RecursosImagenes.getFuentePokemon(13f));
         lblNumero.setForeground(new Color(50, 62, 40));
 
         header.add(lblNombre, BorderLayout.WEST);
@@ -254,8 +257,9 @@ public class PanelPokedex extends JPanel {
         ));
         panelSprite.setPreferredSize(new Dimension(140, 170));
 
+        // CORRECCIÓN: Usar el nuevo método spritePokemonIcon con el nombre del Pokémon
         JLabel spriteLabel = new JLabel(
-                CargadorImagenes.cargarSpritePokemon(p.getNumeroPokedex(), 96, 96)
+                RecursosImagenes.spritePokemonIcon(p.getNombre(), 96, 96)
         );
         panelSprite.add(spriteLabel);
 
@@ -267,10 +271,10 @@ public class PanelPokedex extends JPanel {
         JPanel filaTipo = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         filaTipo.setOpaque(false);
         JLabel lblTipoTag = new JLabel("TYPE    ");
-        lblTipoTag.setFont(CargadorImagenes.getFuentePokemon(10f));
+        lblTipoTag.setFont(RecursosImagenes.getFuentePokemon(10f));
         lblTipoTag.setForeground(TEXTO_SUAVE);
         filaTipo.add(lblTipoTag);
-        JLabel badgeTipo = new JLabel(CargadorImagenes.cargarBadgeTipo(p.getTipo().toString(), 70, 22));
+        JLabel badgeTipo = new JLabel(RecursosImagenes.cargarBadgeTipo(p.getTipo().toString(), 70, 22));
         filaTipo.add(badgeTipo);
         filaTipo.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -280,7 +284,7 @@ public class PanelPokedex extends JPanel {
         statsBox.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createTitledBorder(
                         BorderFactory.createLineBorder(PANTALLA_BORDE, 1),
-                        "STATS", 0, 0, CargadorImagenes.getFuentePokemon(9f), TEXTO_SUAVE
+                        "STATS", 0, 0, RecursosImagenes.getFuentePokemon(9f), TEXTO_SUAVE
                 ),
                 BorderFactory.createEmptyBorder(4, 6, 6, 6)
         ));
@@ -415,19 +419,22 @@ public class PanelPokedex extends JPanel {
     /**
      * Badge de tipo redondeado y coloreado según el tipo
      */
+    /**
+     * Badge de tipo redondeado y coloreado según el tipo
+     * CORRECCIÓN: Ahora usa TipoPokemon en lugar de String para coincidir con los métodos de RecursosImagenes
+     */
     private static class EtiquetaTipo extends JComponent {
+        private final TipoPokemon tipo;
 
-        private final String tipo;
-
-        EtiquetaTipo(String tipo) {
+        EtiquetaTipo(TipoPokemon tipo) {
             this.tipo = tipo;
-            setFont(CargadorImagenes.getFuentePokemon(11f));
+            setFont(RecursosImagenes.getFuentePokemon(11f));
         }
 
         @Override
         public Dimension getPreferredSize() {
             FontMetrics fm = getFontMetrics(getFont());
-            int ancho = fm.stringWidth(tipo.toUpperCase()) + 26;
+            int ancho = fm.stringWidth(tipo.toString().toUpperCase()) + 26;
             return new Dimension(Math.max(70, ancho), 22);
         }
 
@@ -436,7 +443,7 @@ public class PanelPokedex extends JPanel {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            Color fondo = CargadorImagenes.getColorTipo(tipo);
+            Color fondo = RecursosImagenes.colorTipo(tipo);
             int w = getWidth();
             int h = getHeight();
 
@@ -445,10 +452,10 @@ public class PanelPokedex extends JPanel {
             g2.setColor(fondo.darker());
             g2.drawRoundRect(0, 0, w - 1, h - 1, h, h);
 
-            g2.setColor(CargadorImagenes.getColorTextoSobreTipo(tipo));
+            g2.setColor(RecursosImagenes.colorTextoSobreTipo(tipo));
             g2.setFont(getFont());
             FontMetrics fm = g2.getFontMetrics();
-            String texto = tipo.toUpperCase();
+            String texto = tipo.toString().toUpperCase();
             int tx = (w - fm.stringWidth(texto)) / 2;
             int ty = (h + fm.getAscent()) / 2 - 2;
             g2.drawString(texto, tx, ty);
@@ -473,7 +480,7 @@ public class PanelPokedex extends JPanel {
             this.valor = valor;
             this.maximo = maximo <= 0 ? MAX_REFERENCIA_DEFECTO : maximo;
             this.color = color;
-            setFont(CargadorImagenes.getFuentePokemon(9f));
+            setFont(RecursosImagenes.getFuentePokemon(9f));
             setAlignmentX(Component.LEFT_ALIGNMENT);
         }
 

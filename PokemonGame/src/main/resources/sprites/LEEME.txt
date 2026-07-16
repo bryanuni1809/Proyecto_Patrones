@@ -1,0 +1,12 @@
+Coloca aquí los sprites reales de cada Pokémon con este nombre de archivo:
+
+  <nombre>_normal.png   -> Pokémon en reposo
+  <nombre>_ataque.png   -> Pokémon atacando
+  <nombre>_dano.png     -> Pokémon recibiendo daño
+
+<nombre> = nombre del Pokémon en minúsculas, sin espacios ni acentos.
+Ejemplos: pikachu_normal.png, pikachu_ataque.png, pikachu_dano.png
+
+No hace falta tocar ningún archivo .java: en cuanto el PNG con ese nombre
+exista aquí, la interfaz lo usará automáticamente en vez del placeholder
+generado (un círculo de color con la inicial del Pokémon).

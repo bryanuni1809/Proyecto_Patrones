@@ -1,4 +1,4 @@
-package com.mycompany.GUI;
+package com.mycompany.gui;
 
 import javax.swing.ImageIcon;
 import java.awt.*;
