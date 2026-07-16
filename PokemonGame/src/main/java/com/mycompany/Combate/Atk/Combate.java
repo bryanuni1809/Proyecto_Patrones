@@ -126,8 +126,12 @@ public class Combate implements CombateCallback {
             if (!atacante.getAtaques().isEmpty()) {
                 Ataque ataqueElegido = atacanteEnt.elegirAtaque(atacante);
 
-                AtaqueComand cmd = new AtaqueComand(ataqueElegido, atacante, defensor, defensorEnt, this);
-                cmd.ejecutar();
+                // null = el entrenador usó un ítem de la mochila en vez de atacar;
+                // el turno se consume igual, pero no se ejecuta ningún AtaqueComand.
+                if (ataqueElegido != null) {
+                    AtaqueComand cmd = new AtaqueComand(ataqueElegido, atacante, defensor, defensorEnt, this);
+                    cmd.ejecutar();
+                }
             }
         }
     }

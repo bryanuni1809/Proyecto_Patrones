@@ -8,9 +8,6 @@ public class TablaTipos { //Utiliza el patron singleton para instanciar una unic
     // 1. Instancia única privada
     private static TablaTipos instancia;
 
-    static TablaTipos getInstancia() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
     private final Map<TipoPokemon, TipoInfo> tabla = new HashMap<>();
     
     // 2. Constructor privado
@@ -84,7 +81,7 @@ public class TablaTipos { //Utiliza el patron singleton para instanciar una unic
 
     }
     // 3. Método de acceso global al Singleton
-    public static synchronized TablaTipos getInstancaia(){
+    public static synchronized TablaTipos getInstancia(){
         if (instancia == null) {
             instancia = new TablaTipos();
         }

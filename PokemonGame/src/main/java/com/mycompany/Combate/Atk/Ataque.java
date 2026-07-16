@@ -13,7 +13,7 @@ public abstract class Ataque implements Prototype<Ataque>{ // Se utiliza el patr
     protected Ataque(Builder<?> builder) {
         this.potencia = builder.potencia;
         this.tipo = builder.tipo;
-        this.nombre = "Ataque especial tipo: " + tipo;
+        this.nombre = builder.nombre;
     }
 
     //Metodo abstracto
