@@ -198,7 +198,7 @@ public final class RecursosImagenes {
      */
     public static BufferedImage spritePokemon(String nombrePokemon, boolean frontal) {
         String n = normalizar(nombrePokemon);
-        String archivo = "/sprites/rival/" + n + "/"+ n + "_normal.png";
+        String archivo = "/sprites/rival/" + n + "/" + n + "_normal.png";
         return cargar(archivo, () -> generarSpritePlaceholder(nombrePokemon));
     }
 

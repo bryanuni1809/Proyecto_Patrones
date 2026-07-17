@@ -12,6 +12,7 @@ import javax.swing.Timer;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -27,9 +28,9 @@ import java.util.function.IntConsumer;
  * Panel visual de la batalla.
  *
  * Responsabilidad única: dibujar el estado que se le indique (sprites, HP,
- * mensajes) y avisar cuándo el jugador hace clic en un botón de ataque.
- * No conoce reglas de combate ni el modelo Combate/AtaqueComand: todo eso
- * sigue viviendo intacto en las clases originales.
+ * mensajes) y avisar cuándo el jugador hace clic en un botón de ataque. No
+ * conoce reglas de combate ni el modelo Combate/AtaqueComand: todo eso sigue
+ * viviendo intacto en las clases originales.
  */
 public class PanelBatalla extends JPanel {
 
@@ -44,7 +45,7 @@ public class PanelBatalla extends JPanel {
     private double hpJugadorMostrado;
     private double hpRivalMostrado;
     private Timer animTimer;
-    
+
     //animaciones
     private int offsetJugadorX = 0;
     private int offsetRivalX = 0;
@@ -53,6 +54,7 @@ public class PanelBatalla extends JPanel {
     private boolean flashRival = false;
 
     public PanelBatalla() {
+        RecursosImagenes.configurarRenderizadoFuente();
         setLayout(new BorderLayout(0, 8));
         setBackground(new Color(28, 28, 38));
 
@@ -72,13 +74,19 @@ public class PanelBatalla extends JPanel {
         // el escenario (fondo + sprites) cambiara de tamaño y se desacomodara.
         sur.setPreferredSize(new Dimension(700, 160));
 
+// Configuración CORREGIDA del JTextArea mensaje
         mensaje.setEditable(false);
         mensaje.setLineWrap(true);
         mensaje.setWrapStyleWord(true);
-        mensaje.setFont(new Font("SansSerif", Font.PLAIN, 15));
+        mensaje.setOpaque(true);  // CRÍTICO: Permite pintar el fondo
+        mensaje.setForeground(Color.BLACK);  // Color del texto
         mensaje.setBackground(new Color(250, 250, 245));
+        mensaje.setFont(RecursosImagenes.getFuentePokemon(13f));
         mensaje.setRows(3);
+        mensaje.setColumns(50);  // Evita problemas de cálculo de ancho
         mensaje.setPreferredSize(new Dimension(700, 66));
+        mensaje.setCaretPosition(0);  // Previene scroll automático
+        mensaje.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         mensaje.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(60, 60, 70), 2, true),
                 BorderFactory.createEmptyBorder(8, 10, 8, 10)));
@@ -92,7 +100,6 @@ public class PanelBatalla extends JPanel {
     }
 
     // ── API pública usada por el observador de combate ────────────────────
-
     public void setPokemonJugador(Pokemon p) {
         this.pokemonJugador = p;
         this.hpJugadorMostrado = p.getHpActual();
@@ -157,13 +164,16 @@ public class PanelBatalla extends JPanel {
         animTimer.start();
     }
 
-    /** Muestra un botón por cada ataque disponible; al pulsar uno se invoca onElegir con su índice. */
+    /**
+     * Muestra un botón por cada ataque disponible; al pulsar uno se invoca
+     * onElegir con su índice.
+     */
     public void mostrarBotonesAtaque(List<Ataque> ataques, IntConsumer onElegir) {
         panelBotones.removeAll();
         for (int i = 0; i < ataques.size(); i++) {
             final int idx = i;
             JButton boton = new JButton(ataques.get(i).getNombre());
-            boton.setFont(new Font("SansSerif", Font.BOLD, 13));
+            boton.setFont(RecursosImagenes.getFuentePokemon(12f));
             boton.setFocusPainted(false);
             boton.addActionListener(e -> {
                 ocultarBotonesAtaque();
@@ -181,10 +191,12 @@ public class PanelBatalla extends JPanel {
         panelBotones.repaint();
     }
 
-    /** Agrega el botón de Mochila junto a los botones de ataque ya mostrados. */
+    /**
+     * Agrega el botón de Mochila junto a los botones de ataque ya mostrados.
+     */
     public void agregarBotonMochila(Runnable onAbrirMochila) {
         JButton boton = new JButton("Mochila");
-        boton.setFont(new Font("SansSerif", Font.BOLD, 13));
+        boton.setFont(RecursosImagenes.getFuentePokemon(12f));
         boton.setFocusPainted(false);
         boton.addActionListener(e -> onAbrirMochila.run());
         panelBotones.add(boton);
@@ -193,7 +205,6 @@ public class PanelBatalla extends JPanel {
     }
 
     // ── Escena dibujada a mano: fondo + sprites + barras de vida ──────────
-
     private class Escena extends JPanel {
 
         Escena() {
@@ -213,15 +224,15 @@ public class PanelBatalla extends JPanel {
             if (pokemonRival != null) {
                 g.drawImage(RecursosImagenes.plataforma(), getWidth() - 255 + offsetRivalX, 225, 190, 60, null);
                 BufferedImage sr = RecursosImagenes.spriteRival(pokemonRival.getNombre(), spriteRival);
-                g.drawImage(sr, getWidth() - 260+ offsetRivalX, 120, 190, 190, null);
+                g.drawImage(sr, getWidth() - 260 + offsetRivalX, 120, 190, 190, null);
                 dibujarPanelInfo(g, 24, 24, pokemonRival, hpRivalMostrado);
                 if (flashRival) {
-                    g.setColor(new Color(255,0,0,90));
+                    g.setColor(new Color(255, 0, 0, 90));
                     g.fillRect(
-                        getWidth()-230 + offsetRivalX,
-                        40,
-                        150,
-                        150
+                            getWidth() - 230 + offsetRivalX,
+                            40,
+                            150,
+                            150
                     );
                 }
             }
@@ -229,15 +240,15 @@ public class PanelBatalla extends JPanel {
             if (pokemonJugador != null) {
                 g.drawImage(RecursosImagenes.plataforma(), 15 + offsetJugadorX, getHeight() - 90, 300, 75, null);
                 BufferedImage sj = RecursosImagenes.spriteJugador(pokemonJugador.getNombre(), spriteJugador);
-                g.drawImage(sj, 30, getHeight() - 250+ offsetJugadorX, 300, 300, null);
+                g.drawImage(sj, 30, getHeight() - 250 + offsetJugadorX, 300, 300, null);
                 dibujarPanelInfo(g, getWidth() - 260, getHeight() - 130, pokemonJugador, hpJugadorMostrado);
                 if (flashJugador) {
-                    g.setColor(new Color(255,0,0,90));
+                    g.setColor(new Color(255, 0, 0, 90));
                     g.fillRect(
-                        80 + offsetJugadorX,
-                        getHeight()-210,
-                        150,
-                        150
+                            80 + offsetJugadorX,
+                            getHeight() - 210,
+                            150,
+                            150
                     );
                 }
             }
@@ -248,7 +259,7 @@ public class PanelBatalla extends JPanel {
             g.drawImage(RecursosImagenes.marcoInfo(), x, y, ancho, alto, null);
 
             g.setColor(new Color(40, 40, 50));
-            g.setFont(new Font("SansSerif", Font.BOLD, 16));
+            g.setFont(RecursosImagenes.getFuentePokemon(14f));
             String nombreNivel = p.getNombre() + "  Nv." + p.getNivel();
             g.drawString(nombreNivel, x + 14, y + 24);
 
@@ -263,11 +274,11 @@ public class PanelBatalla extends JPanel {
             double pct = Math.max(0, Math.min(1.0, hpMostrado / (double) p.getHp()));
             Color colorHp = pct > 0.5 ? new Color(80, 190, 90)
                     : pct > 0.2 ? new Color(230, 200, 60)
-                    : new Color(220, 70, 70);
+                            : new Color(220, 70, 70);
             g.setColor(colorHp);
             g.fillRoundRect(barX + 2, barY + 2, Math.max(0, (int) (barW * pct) - 4), barH - 4, 6, 6);
 
-            g.setFont(new Font("SansSerif", Font.PLAIN, 12));
+            g.setFont(RecursosImagenes.getFuentePokemon(10f));
             g.setColor(new Color(60, 60, 60));
             FontMetrics fm = g.getFontMetrics();
             String texto = Math.max(0, (int) Math.round(hpMostrado)) + " / " + p.getHp() + " HP";
@@ -276,13 +287,17 @@ public class PanelBatalla extends JPanel {
 
         private void dibujarBadgeEstado(Graphics2D g, int x, int y, int anchoPanel, String estado, int anchoNombre) {
             Color color = switch (estado) {
-                case "Paralizado" -> new Color(235, 196, 52);
-                case "Dormido" -> new Color(110, 130, 200);
-                case "Quemado" -> new Color(230, 110, 60);
-                default -> new Color(140, 140, 140);
+                case "Paralizado" ->
+                    new Color(235, 196, 52);
+                case "Dormido" ->
+                    new Color(110, 130, 200);
+                case "Quemado" ->
+                    new Color(230, 110, 60);
+                default ->
+                    new Color(140, 140, 140);
             };
 
-            g.setFont(new Font("SansSerif", Font.BOLD, 10));
+            g.setFont(RecursosImagenes.getFuentePokemon(9f));
             FontMetrics fm = g.getFontMetrics();
             int padH = 6, padV = 3;
             int bw = fm.stringWidth(estado) + padH * 2;
@@ -297,6 +312,7 @@ public class PanelBatalla extends JPanel {
             g.drawString(estado, bx + padH, by + bh - padV);
         }
     }
+
     public void animarAtaqueJugador() {
 
         Timer t = new Timer(20, null);
@@ -320,9 +336,10 @@ public class PanelBatalla extends JPanel {
 
         t.start();
     }
+
     public void animarAtaqueRival() {
 
-         Timer t = new Timer(20, null);
+        Timer t = new Timer(20, null);
 
         final int[] paso = {0};
 
@@ -343,6 +360,7 @@ public class PanelBatalla extends JPanel {
 
         t.start();
     }
+
     public void animarGolpeJugador() {
 
         final int[] paso = {0};
@@ -352,11 +370,16 @@ public class PanelBatalla extends JPanel {
         t.addActionListener(e -> {
 
             switch (paso[0]) {
-                case 0 -> offsetJugadorX = -6;
-                case 1 -> offsetJugadorX = 6;
-                case 2 -> offsetJugadorX = -6;
-                case 3 -> offsetJugadorX = 6;
-                case 4 -> offsetJugadorX = 0;
+                case 0 ->
+                    offsetJugadorX = -6;
+                case 1 ->
+                    offsetJugadorX = 6;
+                case 2 ->
+                    offsetJugadorX = -6;
+                case 3 ->
+                    offsetJugadorX = 6;
+                case 4 ->
+                    offsetJugadorX = 0;
             }
 
             escena.repaint();
@@ -372,6 +395,7 @@ public class PanelBatalla extends JPanel {
 
         t.start();
     }
+
     public void animarGolpeRival() {
 
         final int[] paso = {0};
@@ -381,11 +405,16 @@ public class PanelBatalla extends JPanel {
         t.addActionListener(e -> {
 
             switch (paso[0]) {
-                case 0 -> offsetRivalX = -6;
-                case 1 -> offsetRivalX = 6;
-                case 2 -> offsetRivalX = -6;
-                case 3 -> offsetRivalX = 6;
-                case 4 -> offsetRivalX = 0;
+                case 0 ->
+                    offsetRivalX = -6;
+                case 1 ->
+                    offsetRivalX = 6;
+                case 2 ->
+                    offsetRivalX = -6;
+                case 3 ->
+                    offsetRivalX = 6;
+                case 4 ->
+                    offsetRivalX = 0;
             }
 
             escena.repaint();
@@ -401,18 +430,20 @@ public class PanelBatalla extends JPanel {
 
         t.start();
     }
+
     public void flashJugador() {
 
         flashJugador = true;
         escena.repaint();
 
-        new Timer(120,e->{
+        new Timer(120, e -> {
             flashJugador = false;
             escena.repaint();
-            ((Timer)e.getSource()).stop();
+            ((Timer) e.getSource()).stop();
         }).start();
 
     }
+
     public void flashRival() {
 
         flashRival = true;

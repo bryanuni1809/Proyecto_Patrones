@@ -23,12 +23,14 @@ import com.mycompany.Patrones.state.EstadoQuemado;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -64,6 +66,8 @@ public class Sistema_Batalla extends JPanel {
 
     public Sistema_Batalla() {
         setLayout(new BorderLayout());
+        setBackground(EstiloJuego.FONDO_APP);
+        contenedor.setBackground(EstiloJuego.FONDO_APP);
         add(contenedor, BorderLayout.CENTER);
         contenedor.add(crearPanelInicio(), CARD_INICIO);
         cardLayout.show(contenedor, CARD_INICIO);
@@ -126,35 +130,72 @@ public class Sistema_Batalla extends JPanel {
 
     private JPanel crearPanelInicio() {
         JPanel inicio = new JPanel(new BorderLayout());
-        inicio.setBackground(new Color(235, 244, 250));
+        inicio.setBackground(EstiloJuego.FONDO_APP);
+        inicio.add(construirEncabezado(), BorderLayout.NORTH);
+
+        EstiloJuego.TarjetaGBA tarjeta = new EstiloJuego.TarjetaGBA();
+        tarjeta.setPreferredSize(new Dimension(380, 260));
+        tarjeta.setLayout(new BorderLayout());
+
+        JPanel contenido = new JPanel();
+        contenido.setOpaque(false);
+        contenido.setLayout(new BoxLayout(contenido, BoxLayout.Y_AXIS));
+        contenido.setBorder(BorderFactory.createEmptyBorder(30, 24, 24, 24));
+
+        JLabel icono = new JLabel(RecursosImagenes.cargarIconoBatalla(56));
+        icono.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel titulo = new JLabel("Modo Batalla", SwingConstants.CENTER);
-        titulo.setFont(new Font("SansSerif", Font.BOLD, 26));
-        titulo.setForeground(new Color(40, 60, 130));
-        titulo.setBorder(BorderFactory.createEmptyBorder(40, 0, 10, 0));
+        titulo.setFont(RecursosImagenes.getFuentePokemon(18f));
+        titulo.setForeground(EstiloJuego.TEXTO_OSCURO);
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titulo.setBorder(BorderFactory.createEmptyBorder(14, 0, 8, 0));
 
-        JLabel subtitulo = new JLabel("Arma tu equipo y enfréntate a un entrenador rival", SwingConstants.CENTER);
-        subtitulo.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        subtitulo.setForeground(new Color(80, 80, 90));
+        JLabel subtitulo = new JLabel(
+                "<html><center>Arma tu equipo de 3 Pokémon<br>y enfréntate a un entrenador rival</center></html>",
+                SwingConstants.CENTER);
+        subtitulo.setFont(RecursosImagenes.getFuentePokemon(11f));
+        subtitulo.setForeground(EstiloJuego.TEXTO_SUAVE);
+        subtitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        subtitulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
 
-        JPanel norte = new JPanel(new BorderLayout());
-        norte.setOpaque(false);
-        norte.add(titulo, BorderLayout.NORTH);
-        norte.add(subtitulo, BorderLayout.CENTER);
-
-        JButton comenzar = new JButton("Iniciar batalla");
-        comenzar.setFont(new Font("SansSerif", Font.BOLD, 16));
-        comenzar.setFocusPainted(false);
-        comenzar.setPreferredSize(new Dimension(220, 50));
+        JButton comenzar = EstiloJuego.botonEstilizado("Iniciar batalla", EstiloJuego.ROJO_ACENTO, Color.WHITE);
+        comenzar.setAlignmentX(Component.CENTER_ALIGNMENT);
         comenzar.addActionListener(e -> mostrarSeleccionEquipo());
 
-        JPanel centro = new JPanel();
-        centro.setOpaque(false);
-        centro.add(comenzar);
+        contenido.add(icono);
+        contenido.add(titulo);
+        contenido.add(subtitulo);
+        contenido.add(comenzar);
+        tarjeta.add(contenido, BorderLayout.CENTER);
 
-        inicio.add(norte, BorderLayout.NORTH);
-        inicio.add(centro, BorderLayout.CENTER);
+        JPanel centrado = new JPanel(new GridBagLayout());
+        centrado.setOpaque(false);
+        centrado.setBackground(EstiloJuego.FONDO_APP);
+        centrado.add(tarjeta);
+
+        inicio.add(centrado, BorderLayout.CENTER);
         return inicio;
+    }
+
+    private JPanel construirEncabezado() {
+        JPanel contenedorEnc = new JPanel(new BorderLayout());
+        contenedorEnc.setBackground(EstiloJuego.FONDO_APP);
+        contenedorEnc.add(EstiloJuego.franjaDecorativa(), BorderLayout.NORTH);
+
+        JPanel encabezado = new JPanel(new BorderLayout());
+        encabezado.setBackground(EstiloJuego.FONDO_APP);
+        encabezado.setBorder(BorderFactory.createEmptyBorder(12, 14, 12, 14));
+
+        JLabel titulo = new JLabel("Batalla");
+        titulo.setFont(RecursosImagenes.getFuentePokemon(26f));
+        titulo.setForeground(EstiloJuego.ROJO_ACENTO_OSC);
+        titulo.setIcon(RecursosImagenes.cargarIconoBatalla(26));
+        titulo.setIconTextGap(10);
+
+        encabezado.add(titulo, BorderLayout.WEST);
+        contenedorEnc.add(encabezado, BorderLayout.SOUTH);
+        return contenedorEnc;
     }
 
     /** Monta PanelSeleccionEquipo dentro del CardLayout y lo muestra. */

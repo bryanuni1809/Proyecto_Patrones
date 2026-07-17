@@ -18,10 +18,10 @@ public class VentanaPrincipal extends JFrame {
         setSize(980, 720);
         setMinimumSize(new Dimension(760, 560));
         setLocationRelativeTo(null);
-        setIconImage(CargadorImagenes.cargarIconoPokebola(32).getImage());
+        setIconImage(RecursosImagenes.cargarIconoPokebola(32).getImage());
 
         JTabbedPane pestanas = new JTabbedPane();
-        pestanas.setFont(CargadorImagenes.getFuentePokemon(13f));
+        pestanas.setFont(RecursosImagenes.getFuentePokemon(13f));
         pestanas.setBackground(new Color(250, 244, 234));
         pestanas.addTab("Pokedex", RecursosImagenes.cargarIconoPokedex(16), new PanelPokedex(facade));
         pestanas.addTab("Batalla", RecursosImagenes.cargarIconoBatalla(16), new Sistema_Batalla());
