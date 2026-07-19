@@ -52,7 +52,6 @@ com\mycompany\gui\PanelPokedex$TarjetaGBA.class
 com\mycompany\gui\PanelPokedex$EtiquetaTipo.class
 com\mycompany\Combate\Atk\AtaqueComand.class
 com\mycompany\Model\pokemon\TipoPokemon.class
-com\pokemon\dao\PokemonDAO.class
 com\mycompany\Combate\Atk\AtaqueFisico.class
 com\mycompany\gui\SelectorAtaqueGUI.class
 com\mycompany\Patrones\state\EstadoPokemon.class
