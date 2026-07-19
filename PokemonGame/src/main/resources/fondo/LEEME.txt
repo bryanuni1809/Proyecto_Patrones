@@ -1,0 +1,7 @@
+Coloca aquí el fondo de batalla con el nombre exacto:
+
+  escenario.png
+
+En cuanto exista ese archivo, la interfaz lo usará automáticamente en vez
+del fondo placeholder (cielo + pasto generado por código). No hace falta
+tocar ningún .java.
