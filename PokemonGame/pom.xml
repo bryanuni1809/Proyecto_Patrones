@@ -9,17 +9,64 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     
-<properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.release>25</maven.compiler.release>
-    <exec.mainClass>com.mycompany.gui.VentanaPrincipal</exec.mainClass>
-</properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>25</maven.compiler.release>
+        <exec.mainClass>com.mycompany.gui.VentanaPrincipal</exec.mainClass>
+    </properties>
     
     <dependencies>
+        <!-- JUnit 5 (Jupiter) -->
         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Mockito Core actualizado -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.15.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Integración de Mockito con JUnit 5 actualizada -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>5.15.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency> 
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.3</version> 
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <!-- Tu plugin de compilación (si lo tienes) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>25</release>
+                </configuration>
+            </plugin>
+
+            <!-- ESTE ES EL PLUGIN CLAVE PARA LAS PRUEBAS -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <!-- Esta línea le da permiso explícito a Byte Buddy para procesar Java 25 -->
+                    <argLine>-Dnet.bytebuddy.experimental=true</argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
