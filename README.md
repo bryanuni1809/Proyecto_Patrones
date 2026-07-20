@@ -85,6 +85,3 @@ Proyecto académico de práctica de patrones de diseño en equipo. Cada rama `fe
 
 ##  Diapositivas
 Link: https://canva.link/dkr2c4zkezt1e78
-
-
-<p align="center">Hecho con ❤️, café y demasiados <code>switch</code> sobre <code>TipoPokemon</code>.</p>
