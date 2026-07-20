@@ -77,10 +77,14 @@ Al abrir, se carga la Pokédex desde la BD → eliges tu equipo de 3 → el jueg
 
 `feature/operaciones-andrea` corresponde al desarrollo de las operaciones de combate (ataques, daño, estados y estructura de comandos) dentro del proyecto colaborativo.
 
-##  🟡 Contribuciones
+##  Contribuciones
 
 Proyecto académico de práctica de patrones de diseño en equipo. Cada rama `feature/*` corresponde a un integrante o módulo del sistema — revisa el historial de ramas para ver el resto del desarrollo.
 
 ---
+
+##  Diapositivas
+Link: https://canva.link/dkr2c4zkezt1e78
+
 
 <p align="center">Hecho con ❤️, café y demasiados <code>switch</code> sobre <code>TipoPokemon</code>.</p>
