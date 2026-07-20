@@ -10,7 +10,6 @@ D:\ANDREA\Projects\DISEÑO DE PATRONES PROYECTO\Proyecto_Patrones\PokemonGame\sr
 D:\ANDREA\Projects\DISEÑO DE PATRONES PROYECTO\Proyecto_Patrones\PokemonGame\src\main\java\com\mycompany\Combate\Atk\CombateMemento.java
 D:\ANDREA\Projects\DISEÑO DE PATRONES PROYECTO\Proyecto_Patrones\PokemonGame\src\main\java\com\mycompany\Combate\Atk\CombateObservador.java
 D:\ANDREA\Projects\DISEÑO DE PATRONES PROYECTO\Proyecto_Patrones\PokemonGame\src\main\java\com\mycompany\Combate\Atk\ConsolaObservador.java
-D:\ANDREA\Projects\DISEÑO DE PATRONES PROYECTO\Proyecto_Patrones\PokemonGame\src\main\java\com\mycompany\Combate\Atk\Estado.java
 D:\ANDREA\Projects\DISEÑO DE PATRONES PROYECTO\Proyecto_Patrones\PokemonGame\src\main\java\com\mycompany\Combate\Atk\TablaTipos.java
 D:\ANDREA\Projects\DISEÑO DE PATRONES PROYECTO\Proyecto_Patrones\PokemonGame\src\main\java\com\mycompany\Facade\PokemonGameFacade.java
 D:\ANDREA\Projects\DISEÑO DE PATRONES PROYECTO\Proyecto_Patrones\PokemonGame\src\main\java\com\mycompany\GUI\CombateObservadorGUI.java

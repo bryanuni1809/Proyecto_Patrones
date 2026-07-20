@@ -8,40 +8,38 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import com.mycompany.gui.RecursosImagenes;
-import com.mycompany.Model.pokemon.TipoPokemon; // <-- Agregado para EtiquetaTipo
+import com.mycompany.Model.pokemon.TipoPokemon;
 
-
+// Panel principal de la Pokedex que usa el patron Fachada para obtener datos
 public class PanelPokedex extends JPanel {
 
-    // ═══════════════════════════════════════════════════════════════
-    // PALETA
-    // ═══════════════════════════════════════════════════════════════
+    // Define la paleta de colores personalizada para la interfaz estilo retro
     private static final Color FONDO_APP = new Color(250, 244, 234);
     private static final Color ROJO_ACENTO = new Color(200, 44, 44);
     private static final Color ROJO_ACENTO_OSC = new Color(150, 28, 28);
-
     private static final Color BISEL_CLARO = new Color(182, 200, 166);
     private static final Color BISEL_OSCURO = new Color(122, 142, 108);
     private static final Color BISEL_BORDE = new Color(78, 96, 66);
     private static final Color BISEL_BORDE_HOVER = new Color(255, 196, 0);
-
     private static final Color PANTALLA_FONDO = new Color(240, 246, 224);
     private static final Color PANTALLA_BORDE = new Color(150, 168, 122);
-
     private static final Color HEADER_CLARO = new Color(146, 198, 120);
     private static final Color HEADER_OSCURO = new Color(92, 150, 76);
-
     private static final Color SPRITE_FONDO = new Color(222, 234, 202);
     private static final Color SPRITE_BORDE = new Color(140, 160, 116);
-
     private static final Color TEXTO_OSCURO = new Color(44, 52, 38);
     private static final Color TEXTO_SUAVE = new Color(96, 108, 84);
 
+    // Fachada que centraliza el acceso a la logica y datos del juego
     private final PokemonGameFacade facade;
-    private final JPanel grilla;      // GridLayout real -> alineación perfecta
+    
+    // Contenedor de la grilla que muestra las tarjetas de los Pokemon
+    private final JPanel grilla;
+    
+    // Campo de texto para filtrar la busqueda
     private JTextField buscador;
 
+    // Inicializa el panel, configura el diseño y carga los datos iniciales
     public PanelPokedex(PokemonGameFacade facade) {
         this.facade = facade;
         setLayout(new BorderLayout(0, 0));
@@ -53,11 +51,12 @@ public class PanelPokedex extends JPanel {
         grilla.setBackground(FONDO_APP);
         grilla.setBorder(BorderFactory.createEmptyBorder(6, 16, 20, 16));
 
-        // Envoltorio para que el grid no se estire para llenar todo el alto
+        // Envoltorio para evitar que la grilla se estire verticalmente
         JPanel envoltorio = new JPanel(new BorderLayout());
         envoltorio.setBackground(FONDO_APP);
         envoltorio.add(grilla, BorderLayout.NORTH);
 
+        // Scroll que permite navegar por la lista sin ocupar todo el espacio
         JScrollPane scroll = new JScrollPane(envoltorio);
         scroll.setBorder(null);
         scroll.getViewport().setBackground(FONDO_APP);
@@ -69,9 +68,7 @@ public class PanelPokedex extends JPanel {
         cargarTodos();
     }
 
-    // ═══════════════════════════════════════════════════════════════
-    // ENCABEZADO
-    // ═══════════════════════════════════════════════════════════════
+    // Crea la barra superior con titulo, decoracion y campos de busqueda
     private JPanel construirEncabezado() {
         JPanel contenedor = new JPanel(new BorderLayout());
         contenedor.setBackground(FONDO_APP);
@@ -117,6 +114,7 @@ public class PanelPokedex extends JPanel {
         encabezado.add(panelBusqueda, BorderLayout.SOUTH);
         contenedor.add(encabezado, BorderLayout.SOUTH);
 
+        // Asigna las acciones a los botones y al campo de texto
         btnBuscar.addActionListener(e -> buscar());
         btnLimpiar.addActionListener(e -> cargarTodos());
         buscador.addActionListener(e -> buscar());
@@ -124,14 +122,13 @@ public class PanelPokedex extends JPanel {
         return contenedor;
     }
 
+    // Dibuja un circulo decorativo personalizado usando graficos 2D
     private JComponent circuloDecorativo(int diametro, Color relleno, Color borde) {
         return new JComponent() {
-            @Override
             public Dimension getPreferredSize() {
                 return new Dimension(diametro, diametro);
             }
 
-            @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -145,6 +142,7 @@ public class PanelPokedex extends JPanel {
         };
     }
 
+    // Genera un boton con colores personalizados y efectos visuales al pasar el mouse
     private JButton botonEstilizado(String texto, Color fondo, Color textoColor) {
         JButton boton = new JButton(texto);
         boton.setFont(RecursosImagenes.getFuentePokemon(12f));
@@ -158,12 +156,9 @@ public class PanelPokedex extends JPanel {
         boton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         boton.setOpaque(true);
         boton.addMouseListener(new MouseAdapter() {
-            @Override
             public void mouseEntered(MouseEvent e) {
                 boton.setBackground(fondo.brighter());
             }
-
-            @Override
             public void mouseExited(MouseEvent e) {
                 boton.setBackground(fondo);
             }
@@ -171,9 +166,7 @@ public class PanelPokedex extends JPanel {
         return boton;
     }
 
-    // ═══════════════════════════════════════════════════════════════
-    // CARGA Y BÚSQUEDA
-    // ═══════════════════════════════════════════════════════════════
+    // Busca un Pokemon por nombre usando la Fachada y actualiza la grilla
     private void buscar() {
         String texto = buscador.getText().trim();
         if (texto.isEmpty()) {
@@ -198,6 +191,7 @@ public class PanelPokedex extends JPanel {
         grilla.repaint();
     }
 
+    // Limpia la grilla y carga todos los Pokemon disponibles desde la base de datos
     private void cargarTodos() {
         buscador.setText("");
         grilla.removeAll();
@@ -219,15 +213,13 @@ public class PanelPokedex extends JPanel {
         grilla.repaint();
     }
 
-    // ═══════════════════════════════════════════════════════════════
-    // CARD ESTILO PANTALLA GBA
-    // ═══════════════════════════════════════════════════════════════
+    // Construye una tarjeta visual estilo GameBoy Advance para cada Pokemon
     private JPanel crearTarjetaEstiloGen1(Pokemon p) {
         TarjetaGBA tarjeta = new TarjetaGBA();
         tarjeta.setPreferredSize(new Dimension(430, 210));
         tarjeta.setLayout(new BorderLayout());
 
-        // ---- Header (barra degradada dentro de la pantalla) ----
+        // Barra superior con degradado dentro de la pantalla
         BarraDegradado header = new BarraDegradado(HEADER_CLARO, HEADER_OSCURO);
         header.setLayout(new BorderLayout());
         header.setBorder(BorderFactory.createEmptyBorder(4, 10, 4, 10));
@@ -243,12 +235,12 @@ public class PanelPokedex extends JPanel {
         header.add(lblNombre, BorderLayout.WEST);
         header.add(lblNumero, BorderLayout.EAST);
 
-        // ---- Contenido ----
+        // Contenedor principal de la informacion
         JPanel contenido = new JPanel(new BorderLayout(14, 0));
         contenido.setOpaque(false);
         contenido.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 
-        // Cuadro de sprite (como mini-pantalla dentro de la pantalla)
+        // Cuadro que muestra el sprite del Pokemon
         JPanel panelSprite = new JPanel(new GridBagLayout());
         panelSprite.setBackground(SPRITE_FONDO);
         panelSprite.setBorder(BorderFactory.createCompoundBorder(
@@ -257,13 +249,10 @@ public class PanelPokedex extends JPanel {
         ));
         panelSprite.setPreferredSize(new Dimension(140, 170));
 
-        // CORRECCIÓN: Usar el nuevo método spritePokemonIcon con el nombre del Pokémon
-        JLabel spriteLabel = new JLabel(
-                RecursosImagenes.spritePokemonIcon(p.getNombre(), 96, 96)
-        );
+        JLabel spriteLabel = new JLabel(RecursosImagenes.spritePokemonIcon(p.getNombre(), 96, 96));
         panelSprite.add(spriteLabel);
 
-        // Columna derecha: tipo + stats
+        // Columna derecha que muestra el tipo y las estadisticas
         JPanel columnaInfo = new JPanel();
         columnaInfo.setOpaque(false);
         columnaInfo.setLayout(new BoxLayout(columnaInfo, BoxLayout.Y_AXIS));
@@ -278,6 +267,7 @@ public class PanelPokedex extends JPanel {
         filaTipo.add(badgeTipo);
         filaTipo.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+        // Caja que agrupa las barras de estadisticas
         JPanel statsBox = new JPanel();
         statsBox.setOpaque(false);
         statsBox.setLayout(new BoxLayout(statsBox, BoxLayout.Y_AXIS));
@@ -305,7 +295,7 @@ public class PanelPokedex extends JPanel {
         contenido.add(panelSprite, BorderLayout.WEST);
         contenido.add(columnaInfo, BorderLayout.CENTER);
 
-        // Contenedor interno con el padding de la "pantalla"
+        // Ensamblaje final de la tarjeta
         JPanel pantallaInterior = new JPanel(new BorderLayout());
         pantallaInterior.setOpaque(false);
         pantallaInterior.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -315,13 +305,11 @@ public class PanelPokedex extends JPanel {
         tarjeta.add(pantallaInterior, BorderLayout.CENTER);
         tarjeta.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
+        // Efecto visual al pasar el mouse sobre la tarjeta
         tarjeta.addMouseListener(new MouseAdapter() {
-            @Override
             public void mouseEntered(MouseEvent e) {
                 tarjeta.setHover(true);
             }
-
-            @Override
             public void mouseExited(MouseEvent e) {
                 tarjeta.setHover(false);
             }
@@ -330,14 +318,8 @@ public class PanelPokedex extends JPanel {
         return tarjeta;
     }
 
-    // ═══════════════════════════════════════════════════════════════
-    // COMPONENTES AUXILIARES DE DIBUJO
-    // ═══════════════════════════════════════════════════════════════
-    /**
-     * Panel exterior tipo "consola" con bisel, sombra y pantalla redondeada
-     */
+    // Dibuja el marco exterior de la tarjeta con sombras y bordes redondeados
     private static class TarjetaGBA extends JPanel {
-
         private boolean hover = false;
 
         TarjetaGBA() {
@@ -349,7 +331,6 @@ public class PanelPokedex extends JPanel {
             repaint();
         }
 
-        @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -388,11 +369,8 @@ public class PanelPokedex extends JPanel {
         }
     }
 
-    /**
-     * Barra con degradado vertical, usada como header dentro de la pantalla
-     */
+    // Dibuja un fondo con degradado vertical para los encabezados
     private static class BarraDegradado extends JPanel {
-
         private final Color c1;
         private final Color c2;
 
@@ -402,7 +380,6 @@ public class PanelPokedex extends JPanel {
             setOpaque(false);
         }
 
-        @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -416,13 +393,7 @@ public class PanelPokedex extends JPanel {
         }
     }
 
-    /**
-     * Badge de tipo redondeado y coloreado según el tipo
-     */
-    /**
-     * Badge de tipo redondeado y coloreado según el tipo
-     * CORRECCIÓN: Ahora usa TipoPokemon en lugar de String para coincidir con los métodos de RecursosImagenes
-     */
+    // Dibuja la etiqueta del tipo del Pokemon con su color caracteristico
     private static class EtiquetaTipo extends JComponent {
         private final TipoPokemon tipo;
 
@@ -431,14 +402,12 @@ public class PanelPokedex extends JPanel {
             setFont(RecursosImagenes.getFuentePokemon(11f));
         }
 
-        @Override
         public Dimension getPreferredSize() {
             FontMetrics fm = getFontMetrics(getFont());
             int ancho = fm.stringWidth(tipo.toString().toUpperCase()) + 26;
             return new Dimension(Math.max(70, ancho), 22);
         }
 
-        @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -464,11 +433,8 @@ public class PanelPokedex extends JPanel {
         }
     }
 
-    /**
-     * Barra de estadística tipo "medidor" (HP/ATK/DEF/SPD) con relleno de color
-     */
+    // Dibuja una barra de progreso visual para las estadisticas del Pokemon
     private static class BarraStat extends JComponent {
-
         private static final int MAX_REFERENCIA_DEFECTO = 150;
         private final String etiqueta;
         private final int valor;
@@ -484,17 +450,14 @@ public class PanelPokedex extends JPanel {
             setAlignmentX(Component.LEFT_ALIGNMENT);
         }
 
-        @Override
         public Dimension getPreferredSize() {
             return new Dimension(190, 16);
         }
 
-        @Override
         public Dimension getMaximumSize() {
             return new Dimension(Integer.MAX_VALUE, 16);
         }
 
-        @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -511,11 +474,11 @@ public class PanelPokedex extends JPanel {
             g2.setColor(TEXTO_SUAVE);
             g2.drawString(etiqueta, 0, h - 4);
 
-            // Track
+            // Fondo de la barra
             g2.setColor(new Color(210, 210, 200));
             g2.fillRoundRect(trackX, 3, trackW, h - 8, 6, 6);
 
-            // Relleno proporcional
+            // Relleno proporcional al valor de la estadistica
             double proporcion = Math.max(0, Math.min(1.0, valor / (double) maximo));
             int anchoRelleno = (int) (trackW * proporcion);
             if (anchoRelleno > 2) {

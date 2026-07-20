@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.gui;
 
 import com.mycompany.Combate.Atk.AtaqueEspecial;
@@ -38,32 +34,26 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-/**
- * Panel de la pestaña "Batalla".
- *
- * Antes este flujo abría VentanaSeleccionEquipo y VentanaBatalla, que eran
- * JFrame: ventanas del sistema operativo separadas de la ventana principal
- * (por eso "se ejecutaban fuera" de la pestaña). Ahora todo vive dentro de
- * este mismo JPanel, usando un CardLayout para alternar entre tres
- * pantallas: inicio -> selección de equipo -> batalla. Nada se abre en una
- * ventana aparte.
- */
+// Panel principal que gestiona el flujo de batalla usando CardLayout
 public class Sistema_Batalla extends JPanel {
 
+    // Cantidad fija de Pokemon por equipo
     private static final int TAMANO_EQUIPO = 3;
 
+    // Identificadores para las vistas del CardLayout
     private static final String CARD_INICIO = "inicio";
     private static final String CARD_SELECCION = "seleccion";
     private static final String CARD_BATALLA = "batalla";
 
+    // Manejador de vistas y contenedor principal
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel contenedor = new JPanel(cardLayout);
 
-    // Referencias a las "cards" reemplazables, para poder sacarlas antes de
-    // montar una nueva versión (equipo elegido de nuevo, revancha, etc.).
+    // Referencias para limpiar y reemplazar vistas anteriores
     private JPanel panelSeleccionActual;
     private JPanel panelBatallaActual;
 
+    // Inicializa el panel y muestra la vista de inicio por defecto
     public Sistema_Batalla() {
         setLayout(new BorderLayout());
         setBackground(EstiloJuego.FONDO_APP);
@@ -73,23 +63,18 @@ public class Sistema_Batalla extends JPanel {
         cardLayout.show(contenedor, CARD_INICIO);
     }
 
-    /**
-     * Punto de entrada estático "clásico", conservado por compatibilidad
-     * con quien lo llame fuera de la pestaña (p. ej. Main). Sigue abriendo
-     * VentanaSeleccionEquipo/VentanaBatalla como ventanas aparte, tal como
-     * funcionaba antes. El flujo embebido en la pestaña (arriba) es
-     * independiente de este y no usa JFrame.
-     */
+    // Metodo estatico para compatibilidad con ejecucion en ventana independiente
     public static void iniciar() {
         SwingUtilities.invokeLater(Sistema_Batalla::iniciarJuego);
     }
 
+    // Configura y lanza la ventana de seleccion de equipo en modo independiente
     public static void iniciarJuego() {
         Pokedex pokedex = Pokedex.getInstancia();
         List<Pokemon> disponibles = pokedex.getPokemones();
 
         if (disponibles == null || disponibles.isEmpty()) {
-            System.err.println("La Pokedex está vacía: revisa la conexión a la base de datos.");
+            System.err.println("La Pokedex esta vacia: revisa la conexion a la base de datos.");
             return;
         }
 
@@ -98,6 +83,7 @@ public class Sistema_Batalla extends JPanel {
         seleccion.setVisible(true);
     }
 
+    // Arma los equipos y lanza la ventana de batalla en modo independiente
     private static void iniciarCombateEnVentana(List<Pokemon> equipoElegido) {
         Pokedex pokedex = Pokedex.getInstancia();
 
@@ -111,12 +97,12 @@ public class Sistema_Batalla extends JPanel {
             rival.agregarPokemon(construirPokemonDeCombate(base));
         }
 
-        jugador.agregarItem(new Pocion("Poción", 3, 20));
-        jugador.agregarItem(new Pocion("Súper Poción", 2, 50));
-        jugador.agregarItem(new Pocion("Hiper Poción", 1, 200));
+        jugador.agregarItem(new Pocion("Pocion", 3, 20));
+        jugador.agregarItem(new Pocion("Super Pocion", 2, 50));
+        jugador.agregarItem(new Pocion("Hiper Pocion", 1, 200));
 
         if (jugador.getPokemonActivo() == null || rival.getPokemonActivo() == null) {
-            System.err.println("No se pudo armar algún equipo.");
+            System.err.println("No se pudo armar algun equipo.");
             return;
         }
 
@@ -128,6 +114,7 @@ public class Sistema_Batalla extends JPanel {
         ventana.iniciarCombateEnHilo();
     }
 
+    // Construye la vista inicial con boton para comenzar
     private JPanel crearPanelInicio() {
         JPanel inicio = new JPanel(new BorderLayout());
         inicio.setBackground(EstiloJuego.FONDO_APP);
@@ -152,7 +139,7 @@ public class Sistema_Batalla extends JPanel {
         titulo.setBorder(BorderFactory.createEmptyBorder(14, 0, 8, 0));
 
         JLabel subtitulo = new JLabel(
-                "<html><center>Arma tu equipo de 3 Pokémon<br>y enfréntate a un entrenador rival</center></html>",
+                "<html><center>Arma tu equipo de 3 Pokemon<br>y enfrentate a un entrenador rival</center></html>",
                 SwingConstants.CENTER);
         subtitulo.setFont(RecursosImagenes.getFuentePokemon(11f));
         subtitulo.setForeground(EstiloJuego.TEXTO_SUAVE);
@@ -178,6 +165,7 @@ public class Sistema_Batalla extends JPanel {
         return inicio;
     }
 
+    // Construye la barra superior con el titulo de la seccion
     private JPanel construirEncabezado() {
         JPanel contenedorEnc = new JPanel(new BorderLayout());
         contenedorEnc.setBackground(EstiloJuego.FONDO_APP);
@@ -198,14 +186,14 @@ public class Sistema_Batalla extends JPanel {
         return contenedorEnc;
     }
 
-    /** Monta PanelSeleccionEquipo dentro del CardLayout y lo muestra. */
+    // Cambia la vista actual al panel de seleccion de equipo
     private void mostrarSeleccionEquipo() {
         Pokedex pokedex = Pokedex.getInstancia();
         List<Pokemon> disponibles = pokedex.getPokemones();
 
         if (disponibles == null || disponibles.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "La Pokedex está vacía: revisa la conexión a la base de datos.",
+                    "La Pokedex esta vacia: revisa la conexion a la base de datos.",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -220,7 +208,7 @@ public class Sistema_Batalla extends JPanel {
         contenedor.repaint();
     }
 
-    /** Arma jugador/rival/combate y monta PanelBatalla dentro del CardLayout. */
+    // Configura entrenadores, aplica patron Strategy e inicia el hilo de combate
     private void iniciarCombate(List<Pokemon> equipoElegido) {
         Pokedex pokedex = Pokedex.getInstancia();
 
@@ -234,23 +222,22 @@ public class Sistema_Batalla extends JPanel {
             rival.agregarPokemon(construirPokemonDeCombate(base));
         }
 
-        // Pociones iniciales del jugador (patrón Composite ya implementado en Pocion/MochilaGrupo).
-        jugador.agregarItem(new Pocion("Poción", 3, 20));
-        jugador.agregarItem(new Pocion("Súper Poción", 2, 50));
-        jugador.agregarItem(new Pocion("Hiper Poción", 1, 200));
+        jugador.agregarItem(new Pocion("Pocion", 3, 20));
+        jugador.agregarItem(new Pocion("Super Pocion", 2, 50));
+        jugador.agregarItem(new Pocion("Hiper Pocion", 1, 200));
 
         if (jugador.getPokemonActivo() == null || rival.getPokemonActivo() == null) {
-            JOptionPane.showMessageDialog(this, "No se pudo armar algún equipo.",
+            JOptionPane.showMessageDialog(this, "No se pudo armar algun equipo.",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         Combate combate = new Combate(jugador, rival, new ArrayList<>());
-        combate.registrarObservador(new BitacoraCombate()); // se conserva el log por consola original
+        combate.registrarObservador(new BitacoraCombate());
 
         PanelBatalla panelBatalla = new PanelBatalla();
 
-        // Conecta el patrón Strategy: el jugador elige por clics, el rival por IA.
+        // Strategy: el jugador usa la interfaz grafica, el rival usa inteligencia artificial
         jugador.setSelectorAtaque(new SelectorAtaqueGUI(panelBatalla, jugador));
         rival.setSelectorAtaque(new SelectorAtaqueIA());
 
@@ -259,7 +246,7 @@ public class Sistema_Batalla extends JPanel {
 
         panelBatalla.setPokemonJugador(jugador.getPokemonActivo());
         panelBatalla.setPokemonRival(rival.getPokemonActivo());
-        panelBatalla.mostrarMensaje("¡Comienza el combate entre " + jugador.getNombre()
+        panelBatalla.mostrarMensaje("Comienza el combate entre " + jugador.getNombre()
                 + " y " + rival.getNombre() + "!");
 
         if (panelBatallaActual != null) {
@@ -271,18 +258,17 @@ public class Sistema_Batalla extends JPanel {
         contenedor.revalidate();
         contenedor.repaint();
 
-        // Combate.iniciarBatalla() es bloqueante, por eso corre en un hilo aparte
-        // (igual que antes en VentanaBatalla.iniciarCombateEnHilo()).
+        // El bucle de batalla es bloqueante, por eso se ejecuta en un hilo separado
         Thread hiloCombate = new Thread(combate::iniciarBatalla, "hilo-combate");
         hiloCombate.setDaemon(true);
         hiloCombate.start();
     }
 
-    /** Al terminar el combate: preguntar si quiere revancha o volver al inicio de la pestaña. */
+    // Muestra dialogo de revancha o regresa a la vista de inicio
     private void mostrarFinDeCombate(String ganador) {
         SwingUtilities.invokeLater(() -> {
             int opcion = JOptionPane.showConfirmDialog(this,
-                    "Ganador: " + ganador + "\n¿Deseas jugar de nuevo?",
+                    "Ganador: " + ganador + "\nDeseas jugar de nuevo?",
                     "Combate terminado", JOptionPane.YES_NO_OPTION);
             if (opcion == JOptionPane.YES_OPTION) {
                 mostrarSeleccionEquipo();
@@ -292,20 +278,14 @@ public class Sistema_Batalla extends JPanel {
         });
     }
 
-    /** Elige, sin repetir, hasta "cantidad" Pokémon al azar de la Pokedex para el rival. */
+    // Selecciona rivales al azar sin repeticion de la lista disponible
     private static List<Pokemon> elegirRivalesAleatorios(List<Pokemon> disponibles, int cantidad) {
         List<Pokemon> copia = new ArrayList<>(disponibles);
         Collections.shuffle(copia);
         return copia.subList(0, Math.min(cantidad, copia.size()));
     }
 
-    /**
-     * Clona un Pokémon base de la Pokedex (Prototype, ya implementado en
-     * Pokemon) y le agrega un par de ataques armados con el Builder
-     * existente. La BD solo guarda los stats base; los ataques no vienen
-     * de la BD, así que se arman aquí igual que lo haría cualquier otro
-     * cliente del Builder.
-     */
+    // Usa Prototype para clonar y Builder para agregar ataques base al Pokemon
     private static Pokemon construirPokemonDeCombate(Pokemon base) {
         Pokemon pokemon = base.clonar();
         pokemon.agregarAtaque(
@@ -320,11 +300,7 @@ public class Sistema_Batalla extends JPanel {
         return pokemon;
     }
 
-    /**
-     * Asocia un estado alterado distinto según el tipo del Pokémon, así el
-     * jugador puede toparse con Paralizado, Dormido o Quemado (los 3 ya
-     * implementados en Patrones/state) en vez de usar siempre el mismo.
-     */
+    // Asigna un estado alterado segun el tipo, aplicando el patron State
     private static EstadoPokemon estadoParaTipo(TipoPokemon tipo) {
         return switch (tipo) {
             case FUEGO -> new EstadoQuemado();

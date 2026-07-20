@@ -55,7 +55,6 @@ com\mycompany\Model\pokemon\TipoPokemon.class
 com\mycompany\Combate\Atk\AtaqueFisico.class
 com\mycompany\gui\SelectorAtaqueGUI.class
 com\mycompany\Patrones\state\EstadoPokemon.class
-com\mycompany\Combate\Atk\Estado.class
 com\mycompany\Patrones\state\EstadoParalizado.class
 com\mycompany\gui\RecursosImagenes.class
 com\mycompany\SQL_Conexion\DatabaseConnection.class
